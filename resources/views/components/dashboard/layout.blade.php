@@ -25,8 +25,18 @@
         @livewireStyles
     </head>
     <body class="font-sans antialiased bg-[#080b14] text-slate-200 selection:bg-[#064E3B] selection:text-white">
-        <div class="min-h-screen flex">
-            <aside class="fixed z-50 flex h-full w-72 flex-col border-r border-white/5 bg-[#050505] text-white">
+        <div x-data="{ sidebarOpen: false }" class="min-h-screen xl:flex">
+            <div
+                x-cloak
+                x-show="sidebarOpen"
+                x-transition.opacity
+                class="fixed inset-0 z-40 bg-black/60 xl:hidden"
+                @click="sidebarOpen = false"
+            ></div>
+            <aside
+                class="fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col border-r border-white/5 bg-[#050505] text-white transition-transform duration-300 xl:w-72"
+                :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full xl:translate-x-0'"
+            >
                 <div class="px-8 py-10">
                     <a href="{{ route('home') }}" class="group flex items-center gap-3">
                         <img src="{{ asset('lamsa_logo.png') }}" class="h-10 w-10 object-contain invert brightness-0 transition-transform duration-500 group-hover:-rotate-12" alt="Lamsa Logo">
@@ -63,27 +73,36 @@
                     </div>
                 </div>
             </aside>
-            <main class="ml-72 flex-1">
-                <header class="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-slate-800 bg-[#0f172a]/80 px-12 backdrop-blur-md">
-                    <div class="flex items-center gap-3">
+            <main class="min-w-0 flex-1 xl:ml-72">
+                <header class="sticky top-0 z-30 flex min-h-20 items-center justify-between border-b border-slate-800 bg-[#0f172a]/80 px-4 py-4 backdrop-blur-md sm:px-6 lg:px-8 xl:px-12">
+                    <div class="flex min-w-0 items-center gap-3">
+                        <button
+                            type="button"
+                            class="inline-flex h-10 w-10 items-center justify-center border border-slate-700 bg-slate-900/70 text-slate-300 transition hover:text-white xl:hidden"
+                            @click="sidebarOpen = true"
+                        >
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 7h16M4 12h16M4 17h16" />
+                            </svg>
+                        </button>
                         <div class="h-1.5 w-1.5 bg-[#064E3B]"></div>
-                        <h1 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{{ $headerTitle ?? $header_title ?? 'Overview' }}</h1>
+                        <h1 class="truncate text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{{ $headerTitle ?? $header_title ?? 'Overview' }}</h1>
                     </div>
-                    <div class="flex items-center gap-8">
-                        <button class="relative text-slate-500 transition-colors hover:text-white">
+                    <div class="flex items-center gap-3 sm:gap-5 lg:gap-8">
+                        <button class="relative hidden text-slate-500 transition-colors hover:text-white sm:inline-flex">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
                             <span class="absolute -right-1 -top-1 h-2 w-2 border border-[#0f172a] bg-rose-500"></span>
                         </button>
-                        <div class="h-8 w-px bg-slate-800"></div>
-                        <div class="flex flex-col items-end">
-                            <span class="text-[9px] font-black uppercase leading-tight tracking-widest text-white">{{ auth()->user()->name }}</span>
+                        <div class="hidden h-8 w-px bg-slate-800 sm:block"></div>
+                        <div class="flex min-w-0 flex-col items-end">
+                            <span class="max-w-[9rem] truncate text-[9px] font-black uppercase leading-tight tracking-widest text-white sm:max-w-[12rem]">{{ auth()->user()->name }}</span>
                             <span class="text-[8px] font-bold uppercase tracking-widest text-[#064E3B] opacity-70">Active Session</span>
                         </div>
                     </div>
                 </header>
-                <div class="min-h-[calc(100vh-80px)] p-12">
+                <div class="min-h-[calc(100vh-80px)] p-4 sm:p-6 lg:p-8 xl:p-12">
                     {{ $slot }}
                 </div>
             </main>
