@@ -1,28 +1,46 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@php
+    $sidebarItems = [
+        ['label' => 'My Feed', 'href' => route('dashboard'), 'icon' => 'home', 'active' => true],
+        ['label' => 'My Favorites', 'href' => route('dashboard'), 'icon' => 'heart'],
+        ['label' => 'Order History', 'href' => route('dashboard'), 'icon' => 'bag'],
+        ['label' => 'Settings', 'href' => route('profile'), 'icon' => 'user'],
+    ];
+@endphp
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+<x-dashboard.layout header-title="User Dashboard">
+    <x-slot:sidebar>
+        <x-dashboard.sidebar :items="$sidebarItems" />
+    </x-slot:sidebar>
+
+    <div class="space-y-12">
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <x-dashboard.stat-card 
+                label="Orders Placed" 
+                value="0" />
+            
+            <x-dashboard.stat-card 
+                label="Favorite Items" 
+                value="0" />
+
+            <x-dashboard.stat-card 
+                label="Active Auctions" 
+                value="0" />
+        </div>
+
+        <!-- Recent Activity Placeholder -->
+        <div class="bg-white border border-gray-100 p-10">
+            <div class="flex justify-between items-center mb-8 pb-8 border-b border-gray-50">
+                <h3 class="text-xs font-black uppercase tracking-widest text-black">My Collections</h3>
+                <a href="{{ route('home') }}" class="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-black transition-colors">Start Exploring</a>
+            </div>
+            
+            <div class="py-20 text-center space-y-4">
+                <div class="text-gray-200 text-6xl font-light tracking-tighter uppercase opacity-20">
+                    Lamsa
                 </div>
+                <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Discover handpicked artisanal heritage for your home.</p>
             </div>
         </div>
     </div>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    Hello {{ auth()->user()->name }}!
-                    {{ __("You're logged in as " . (Auth::user()->getRoleNames()->first() ?? 'User') . "!") }}
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+</x-dashboard.layout>

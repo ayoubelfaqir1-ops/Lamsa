@@ -52,9 +52,10 @@ new #[Layout('layouts.guest')] class extends Component
             'craft_type' => $validated['craft_type'],
         ]);
 
+        $user->assignRole('artisan');
         Auth::login($user);
 
-        $this->redirect(route('home', absolute: false), navigate: true);
+        $this->redirect(route('artisan.dashboard', absolute: false), navigate: true);
     }
 }; ?>
 

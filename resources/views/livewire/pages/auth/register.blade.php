@@ -32,7 +32,7 @@ new #[Layout('layouts.guest')] class extends Component
         $user->assignRole('buyer');
         Auth::login($user);
 
-        $this->redirect(route('dashboard', absolute: false), navigate: true);
+        $this->redirect(route('home', absolute: false), navigate: true);
     }
 }; ?>
 
