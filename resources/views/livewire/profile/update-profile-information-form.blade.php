@@ -10,6 +10,8 @@ new class extends Component
 {
     public string $name = '';
     public string $email = '';
+    public string $phone = '';
+    public string $address = '';
 
     /**
      * Mount the component.
@@ -18,6 +20,8 @@ new class extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->phone = Auth::user()->phone ?? '';
+        $this->address = Auth::user()->address ?? '';
     }
 
     /**
@@ -30,6 +34,8 @@ new class extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'phone' => ['required', 'string', 'max:30'],
+            'address' => ['required', 'string', 'max:1000'],
         ]);
 
         $user->fill($validated);
@@ -69,9 +75,15 @@ new class extends Component
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Update your account's profile information, email address, phone number, and address.") }}
         </p>
     </header>
+
+    @if (session('error'))
+        <div class="mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
         <div>
@@ -102,6 +114,26 @@ new class extends Component
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div>
+            <x-input-label for="phone" :value="__('Phone')" />
+            <x-text-input wire:model="phone" id="phone" name="phone" type="text" class="mt-1 block w-full" required autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+        </div>
+
+        <div>
+            <x-input-label for="address" :value="__('Address')" />
+            <textarea
+                wire:model="address"
+                id="address"
+                name="address"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                rows="4"
+                required
+                autocomplete="street-address"
+            ></textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('address')" />
         </div>
 
         <div class="flex items-center gap-4">

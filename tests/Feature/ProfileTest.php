@@ -25,6 +25,8 @@ test('profile information can be updated', function () {
     $component = Volt::test('profile.update-profile-information-form')
         ->set('name', 'Test User')
         ->set('email', 'test@example.com')
+        ->set('phone', '+212600000000')
+        ->set('address', '123 Test Street, Casablanca')
         ->call('updateProfileInformation');
 
     $component
@@ -35,6 +37,8 @@ test('profile information can be updated', function () {
 
     $this->assertSame('Test User', $user->name);
     $this->assertSame('test@example.com', $user->email);
+    $this->assertSame('+212600000000', $user->phone);
+    $this->assertSame('123 Test Street, Casablanca', $user->address);
     $this->assertNull($user->email_verified_at);
 });
 
@@ -46,6 +50,8 @@ test('email verification status is unchanged when the email address is unchanged
     $component = Volt::test('profile.update-profile-information-form')
         ->set('name', 'Test User')
         ->set('email', $user->email)
+        ->set('phone', $user->phone)
+        ->set('address', $user->address)
         ->call('updateProfileInformation');
 
     $component
@@ -53,6 +59,23 @@ test('email verification status is unchanged when the email address is unchanged
         ->assertNoRedirect();
 
     $this->assertNotNull($user->refresh()->email_verified_at);
+});
+
+test('profile information requires phone and address', function () {
+    $user = User::factory()->create([
+        'phone' => null,
+        'address' => null,
+    ]);
+
+    $this->actingAs($user);
+
+    Volt::test('profile.update-profile-information-form')
+        ->set('name', 'Test User')
+        ->set('email', 'test@example.com')
+        ->set('phone', '')
+        ->set('address', '')
+        ->call('updateProfileInformation')
+        ->assertHasErrors(['phone', 'address']);
 });
 
 test('user can delete their account', function () {

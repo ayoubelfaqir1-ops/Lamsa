@@ -14,7 +14,7 @@ class User extends Authenticatable
 {
     use HasRoles, HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'email', 'password', 'phone'];
+    protected $fillable = ['name', 'email', 'password', 'phone', 'address'];
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -39,6 +39,12 @@ class User extends Authenticatable
     public function isBuyer(): bool
     {
         return $this->hasRole('buyer');
+    }
+
+    public function hasCompleteCheckoutProfile(): bool
+    {
+        return trim((string) $this->phone) !== ''
+            && trim((string) $this->address) !== '';
     }
 
     public function artisan(): HasOne
