@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,7 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'role' => RoleMiddleware::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'artisan.active' => \App\Http\Middleware\EnsureArtisanIsActive::class,
+            'profile.complete' => \App\Http\Middleware\EnsureProfileIsComplete::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
