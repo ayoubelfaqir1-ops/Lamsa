@@ -13,10 +13,14 @@ class Auction extends Model
 {
     use HasFactory;
 
+    public const MINIMUM_BID_INCREMENT = 10;
+
     protected $fillable = [
-        'product_id', 'artisan_id', 'starting_price',
+        'store_id', 'artisan_id', 'category_id',
+        'name', 'slug', 'description', 'images',
+        'starting_price',
         'reserve_price', 'current_price', 'status',
-        'starts_at', 'ends_at',
+        'starts_at', 'ends_at', 'is_published',
     ];
 
     protected function casts(): array
@@ -28,6 +32,8 @@ class Auction extends Model
             'current_price'   => 'decimal:2',
             'starts_at'       => 'datetime',
             'ends_at'         => 'datetime',
+            'images'          => 'array',
+            'is_published'    => 'boolean',
         ];
     }
 
@@ -36,14 +42,24 @@ class Auction extends Model
         return $query->where('status', AuctionStatus::Active);
     }
 
-    public function product(): BelongsTo
+    public function scopePublished($query)
     {
-        return $this->belongsTo(Product::class);
+        return $query->where('is_published', true);
     }
 
     public function artisan(): BelongsTo
     {
         return $this->belongsTo(Artisan::class);
+    }
+
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Store::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function bids(): HasMany
@@ -54,5 +70,23 @@ class Auction extends Model
     public function highestBid(): HasOne
     {
         return $this->hasOne(Bid::class)->ofMany('amount', 'max');
+    }
+
+    public function currentBidAmount(): float
+    {
+        return (float) ($this->current_price ?? $this->starting_price);
+    }
+
+    public function minimumNextBid(): float
+    {
+        return $this->currentBidAmount() + self::MINIMUM_BID_INCREMENT;
+    }
+
+    public function canAcceptBids(): bool
+    {
+        return $this->is_published
+            && $this->status === AuctionStatus::Active
+            && $this->starts_at?->isPast()
+            && $this->ends_at?->isFuture();
     }
 }
