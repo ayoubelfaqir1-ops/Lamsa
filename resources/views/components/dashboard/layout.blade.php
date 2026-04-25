@@ -24,85 +24,104 @@
         </style>
         @livewireStyles
     </head>
-    <body class="font-sans antialiased bg-[#080b14] text-slate-200 selection:bg-[#064E3B] selection:text-white">
+    <body class="font-sans antialiased bg-[#0f172a] text-slate-200 selection:bg-[#10B981] selection:text-white">
         <div x-data="{ sidebarOpen: false }" class="min-h-screen xl:flex">
             <div
                 x-cloak
                 x-show="sidebarOpen"
                 x-transition.opacity
-                class="fixed inset-0 z-40 bg-black/60 xl:hidden"
+                class="fixed inset-0 z-40 bg-slate-900/80 backdrop-blur-sm xl:hidden"
                 @click="sidebarOpen = false"
             ></div>
             <aside
-                class="fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col border-r border-white/5 bg-[#050505] text-white transition-transform duration-300 xl:w-72"
-                :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full xl:translate-x-0'"
+                class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-slate-800 bg-[#0f172a] transition-transform duration-300 xl:translate-x-0 shadow-xl"
+                :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
             >
-                <div class="px-8 py-10">
+                <!-- Logo area -->
+                <div class="flex h-14 items-center gap-3 px-6 border-b border-slate-800/60">
                     <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                        <img src="{{ asset('lamsa_logo.png') }}" class="h-10 w-10 object-contain invert brightness-0 transition-transform duration-500 group-hover:-rotate-12" alt="Lamsa Logo">
-                        <span class="text-xl font-black uppercase tracking-tighter text-white">Lamsa</span>
+                        <div class="flex h-9 w-9 items-center justify-center rounded-none bg-gradient-to-br from-[#10B981] to-emerald-700 shadow-md">
+                            <img src="{{ \Illuminate\Support\Facades\Storage::url('site/branding/lamsa_logo.png') }}" class="h-5 w-5 object-contain invert brightness-0" alt="Lamsa Logo">
+                        </div>
+                        <span class="text-xl font-bold tracking-tight text-white">Lamsa</span>
                     </a>
                 </div>
-                <nav class="flex-1 overflow-y-auto pt-4">
+
+                <!-- Navigation -->
+                <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-1">
                     {{ $sidebar ?? '' }}
                 </nav>
-                <div class="mt-auto border-t border-slate-800 bg-[#0f172a]/50 px-6 py-8">
-                    <div class="mb-6 flex items-center gap-4">
-                        <div class="group relative">
-                            <div class="flex h-10 w-10 items-center justify-center bg-[#064E3B] text-xs font-black uppercase ring-2 ring-white/10 transition-all group-hover:ring-[#064E3B]">
+
+                <!-- User Profile area -->
+                <div class="mt-auto border-t border-slate-800/60 bg-slate-900/30 p-4">
+                    <div class="flex items-center gap-3 p-2 rounded-none transition-colors hover:bg-slate-800/50">
+                        <div class="relative">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-none bg-slate-800 text-sm font-semibold text-white ring-1 ring-slate-700">
                                 {{ substr(auth()->user()->name, 0, 1) }}
                             </div>
-                            <div class="absolute -bottom-1 -right-1 h-3 w-3 border-2 border-[#1e293b] bg-emerald-500"></div>
+                            <div class="absolute -bottom-1 -right-1 h-2.5 w-2.5 rounded-none border border-[#0f172a] bg-emerald-500"></div>
                         </div>
                         <div class="min-w-0 flex-1">
-                            <p class="truncate text-[10px] font-black uppercase tracking-[0.1em] text-white">{{ auth()->user()->name }}</p>
-                            <p class="truncate text-[8px] font-bold uppercase leading-tight tracking-widest text-slate-500">{{ auth()->user()->getRoleNames()->first() }}</p>
+                            <p class="truncate text-sm font-medium text-white">{{ auth()->user()->name }}</p>
+                            <p class="truncate text-xs text-slate-400 capitalize">{{ str_replace('_', ' ', auth()->user()->getRoleNames()->first() ?? 'User') }}</p>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="{{ route('profile') }}" class="flex items-center justify-center gap-2 border border-slate-700 bg-slate-800/50 py-2 text-[9px] font-black uppercase tracking-widest text-slate-400 transition-all hover:bg-slate-800 hover:text-white">
-                            <x-dashboard.icon name="user" class="h-3 w-3" />
+                    
+                    <div class="mt-3 grid grid-cols-2 gap-2 px-2">
+                        <a href="{{ route('profile') }}" class="flex items-center justify-center gap-2 rounded-none border border-slate-700/50 bg-slate-800/50 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+                            <x-dashboard.icon name="user" class="h-3.5 w-3.5" />
                             Profile
                         </a>
-                        <button onclick="document.getElementById('logout-form').submit()" class="flex items-center justify-center gap-2 border border-slate-700 bg-slate-800/50 py-2 text-[9px] font-black uppercase tracking-widest text-slate-400 transition-all hover:bg-rose-500/20 hover:text-rose-400">
-                            <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        <button type="button" onclick="document.getElementById('logout-form').submit()" class="flex items-center justify-center gap-2 rounded-none border border-slate-700/50 bg-slate-800/50 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-rose-500/10 hover:text-rose-400">
+                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
-                            Exit
+                            Logout
                         </button>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                        </form>
                     </div>
                 </div>
             </aside>
-            <main class="min-w-0 flex-1 xl:ml-72">
-                <header class="sticky top-0 z-30 flex min-h-20 items-center justify-between border-b border-slate-800 bg-[#0f172a]/80 px-4 py-4 backdrop-blur-md sm:px-6 lg:px-8 xl:px-12">
-                    <div class="flex min-w-0 items-center gap-3">
+
+            <main class="min-w-0 flex-1 xl:ml-64 bg-[#020617]">
+                <!-- Header -->
+                <header class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-slate-800/60 bg-[#020617]/80 px-4 sm:px-6 lg:px-8 backdrop-blur-md">
+                    <div class="flex items-center gap-4">
                         <button
                             type="button"
-                            class="inline-flex h-10 w-10 items-center justify-center border border-slate-700 bg-slate-900/70 text-slate-300 transition hover:text-white xl:hidden"
+                            class="inline-flex h-9 w-9 items-center justify-center rounded-none border border-slate-700 bg-slate-800/50 text-slate-400 transition hover:bg-slate-700 hover:text-white xl:hidden"
                             @click="sidebarOpen = true"
                         >
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 7h16M4 12h16M4 17h16" />
+                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
-                        <div class="h-1.5 w-1.5 bg-[#064E3B]"></div>
-                        <h1 class="truncate text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{{ $headerTitle ?? $header_title ?? 'Overview' }}</h1>
+                        <h1 class="text-sm font-semibold text-slate-200">{{ $headerTitle ?? $header_title ?? 'Overview' }}</h1>
                     </div>
-                    <div class="flex items-center gap-3 sm:gap-5 lg:gap-8">
-                        <button class="relative hidden text-slate-500 transition-colors hover:text-white sm:inline-flex">
+                    
+                    <div class="flex items-center gap-4">
+                        <button class="relative hidden text-slate-400 transition-colors hover:text-white sm:block">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
-                            <span class="absolute -right-1 -top-1 h-2 w-2 border border-[#0f172a] bg-rose-500"></span>
+                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-none ring-1 ring-[#020617] bg-emerald-500"></span>
                         </button>
-                        <div class="hidden h-8 w-px bg-slate-800 sm:block"></div>
-                        <div class="flex min-w-0 flex-col items-end">
-                            <span class="max-w-[9rem] truncate text-[9px] font-black uppercase leading-tight tracking-widest text-white sm:max-w-[12rem]">{{ auth()->user()->name }}</span>
-                            <span class="text-[8px] font-bold uppercase tracking-widest text-[#064E3B] opacity-70">Active Session</span>
+                        <div class="hidden h-5 w-px bg-slate-700 sm:block"></div>
+                        <div class="flex items-center gap-3">
+                            <div class="hidden flex-col items-end sm:flex">
+                                <span class="text-sm font-medium text-white">{{ auth()->user()->name }}</span>
+                                <span class="text-xs text-slate-400 capitalize">{{ str_replace('_', ' ', auth()->user()->getRoleNames()->first() ?? 'User') }}</span>
+                            </div>
+                            <div class="h-8 w-8 rounded-none bg-slate-800 flex items-center justify-center text-sm font-semibold text-white ring-1 ring-slate-700">
+                                {{ substr(auth()->user()->name, 0, 1) }}
+                            </div>
                         </div>
                     </div>
                 </header>
-                <div class="min-h-[calc(100vh-80px)] p-4 sm:p-6 lg:p-8 xl:p-12">
+
+                <div class="min-h-[calc(100vh-3.5rem)] p-4 sm:p-6 lg:p-8 xl:p-10">
                     {{ $slot }}
                 </div>
             </main>
