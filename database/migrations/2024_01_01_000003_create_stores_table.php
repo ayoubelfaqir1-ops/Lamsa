@@ -15,7 +15,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->string('logo')->nullable();
-            $table->string('banner')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 

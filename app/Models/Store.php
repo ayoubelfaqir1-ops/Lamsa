@@ -13,7 +13,7 @@ class Store extends Model
 
     protected $fillable = [
         'artisan_id', 'name', 'slug',
-        'description', 'logo', 'banner', 'is_active',
+        'description', 'logo', 'is_active',
     ];
 
     protected function casts(): array
@@ -36,5 +36,10 @@ class Store extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function auctions(): HasMany
+    {
+        return $this->hasMany(Auction::class);
     }
 }
