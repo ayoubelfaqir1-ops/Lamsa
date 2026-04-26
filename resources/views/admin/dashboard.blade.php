@@ -31,46 +31,6 @@
                 :value="'EUR ' . number_format($platformRevenue, 2)" />
         </div>
 
-        <!-- Performance Analytics (The Middle Section) -->
-        <div class="overflow-hidden border border-slate-800 bg-[#111827] p-5 sm:p-6 lg:p-10">
-            <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between lg:mb-12">
-                <div class="space-y-2">
-                    <h3 class="text-xs font-black uppercase tracking-[0.2em] text-[#10B981]">Revenue Metrics</h3>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Platform performance and growth trajectory</p>
-                </div>
-                <div class="flex flex-wrap gap-4 sm:justify-end">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2.5 h-2.5 bg-[#10B981]"></div>
-                        <span class="text-[9px] font-black uppercase text-slate-400">Gross Revenue</span>
-                    </div>
-                </div>
-            </div>
-            <div class="overflow-x-auto pb-2">
-                <div class="flex h-48 min-w-[40rem] items-end gap-1.5 px-2 sm:min-w-0">
-                    @foreach(range(1, 24) as $i)
-                        <div class="group relative flex-1 cursor-pointer rounded-t-sm bg-emerald-500/20 transition-all hover:bg-emerald-400/80" style="height: {{ rand(20, 95) }}%">
-                            <div class="pointer-events-none absolute -top-10 left-1/2 z-50 -translate-x-1/2 scale-90 bg-white px-3 py-1.5 text-[9px] font-black text-[#0f172a] opacity-0 shadow-xl transition-all group-hover:scale-100 group-hover:opacity-100 after:absolute after:left-1/2 after:top-full after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-white after:content-['']">
-                                EUR {{ rand(120, 850) }}
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            
-            <div class="mt-6 border-t border-slate-800/50 pt-6 sm:mt-8 sm:pt-8">
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:flex lg:gap-16">
-                    <div>
-                        <p class="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1.5">Conversion Rate</p>
-                        <p class="text-xl font-light text-white">3.4% <span class="ml-2 text-xs font-bold text-emerald-500">+ 0.4%</span></p>
-                    </div>
-                    <div>
-                        <p class="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1.5">Avg. Order Value</p>
-                        <p class="text-xl font-light text-white">EUR 84.20 <span class="ml-2 text-xs font-bold text-slate-500">= 0.0%</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
             <!-- Top Artisans Section -->
             <div class="border border-slate-700 bg-[#1e293b] p-5 sm:p-6 lg:p-10">

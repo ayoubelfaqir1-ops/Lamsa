@@ -24,7 +24,7 @@ class DashboardController extends Controller
                 'totalArtisans' => Artisan::count(),
                 'totalPendingRequests' => Artisan::where('status', ArtisanStatus::Pending)->count(),
                 'totalActiveProducts' => Product::where('status', ProductStatus::Active)->count(),
-                'platformRevenue' => Order::where('status', OrderStatus::Completed)->sum('total_amount')
+                'platformRevenue' => Order::where('status', OrderStatus::Delivered)->sum('total_amount')
                     * config('lamsa.commission_rate', 0.10),
             ];
         });
@@ -39,7 +39,7 @@ class DashboardController extends Controller
                 ->select('artisans.*')
                 ->join('order_items', 'artisans.id', '=', 'order_items.artisan_id')
                 ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                ->where('orders.status', OrderStatus::Completed)
+                ->where('orders.status', OrderStatus::Delivered)
                 ->selectRaw('SUM(order_items.quantity * order_items.unit_price) as total_revenue')
                 ->groupBy('artisans.id')
                 ->orderByDesc('total_revenue')
@@ -52,7 +52,7 @@ class DashboardController extends Controller
                 ->select('products.*')
                 ->join('order_items', 'products.id', '=', 'order_items.product_id')
                 ->join('orders', 'order_items.order_id', '=', 'orders.id')
-                ->where('orders.status', OrderStatus::Completed)
+                ->where('orders.status', OrderStatus::Delivered)
                 ->selectRaw('SUM(order_items.quantity) as total_sales')
                 ->groupBy('products.id')
                 ->orderByDesc('total_sales')
