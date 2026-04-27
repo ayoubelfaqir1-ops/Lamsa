@@ -26,7 +26,7 @@
             <div class="hidden lg:flex w-1/2 flex-col justify-between bg-black text-white p-16 relative overflow-hidden h-full shrink-0">
                 <div class="relative z-10">
                     <a href="/" wire:navigate class="flex items-center gap-4 hover:opacity-80 transition-opacity">
-                        <img src="{{ asset('lamsa_logo.png') }}" class="w-16 h-16 object-contain" alt="Lamsa Logo">
+                        <img src="{{ \Illuminate\Support\Facades\Storage::url('site/branding/lamsa_logo.png') }}" class="w-16 h-16 object-contain" alt="Lamsa Logo">
                         <span class="font-semibold text-3xl tracking-tighter uppercase">Lamsa</span>
                     </a>
                 </div>
@@ -42,7 +42,7 @@
                 </div>
                 
                 <!-- Background Image Overlay -->
-                <div class="absolute inset-0 bg-cover bg-center opacity-40 pointer-events-none" style="background-image: url('{{ asset('artisan-bg.jpg') }}');"></div>
+                <div class="absolute inset-0 bg-cover bg-center opacity-40 pointer-events-none" style="background-image: url('{{ \Illuminate\Support\Facades\Storage::url('site/branding/artisan-bg.jpg') }}');"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none"></div>
             </div>
 
@@ -52,7 +52,7 @@
                     <!-- Mobile Logo -->
                     <div class="lg:hidden flex justify-center mb-10">
                         <a href="/" wire:navigate>
-                            <img src="{{ asset('lamsa_logo.png') }}" class="w-20 h-20 object-contain mix-blend-multiply" alt="Lamsa Logo">
+                            <img src="{{ \Illuminate\Support\Facades\Storage::url('site/branding/lamsa_logo.png') }}" class="w-20 h-20 object-contain mix-blend-multiply" alt="Lamsa Logo">
                         </a>
                     </div>
                     
