@@ -1,23 +1,23 @@
 <?php
 
-use App\Http\Controllers\admin\ArtisanController as AdminArtisanController;
-use App\Http\Controllers\admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\artisan\AuctionController as ArtisanAuctionController;
-use App\Http\Controllers\artisan\BidController as ArtisanBidController;
-use App\Http\Controllers\artisan\DashboardController as ArtisanDashboardController;
-use App\Http\Controllers\artisan\OrderController as ArtisanOrderController;
-use App\Http\Controllers\artisan\ProductController as ArtisanProductController;
-use App\Http\Controllers\artisan\StoreController as ArtisanStoreController;
-use App\Http\Controllers\buyer\AuctionController as BuyerAuctionController;
-use App\Http\Controllers\buyer\BidController as BuyerBidController;
-use App\Http\Controllers\buyer\CartController as BuyerCartController;
+use App\Http\Controllers\Admin\ArtisanController as AdminArtisanController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Artisan\AuctionController as ArtisanAuctionController;
+use App\Http\Controllers\Artisan\BidController as ArtisanBidController;
+use App\Http\Controllers\Artisan\DashboardController as ArtisanDashboardController;
+use App\Http\Controllers\Artisan\OrderController as ArtisanOrderController;
+use App\Http\Controllers\Artisan\ProductController as ArtisanProductController;
+use App\Http\Controllers\Artisan\StoreController as ArtisanStoreController;
+use App\Http\Controllers\Buyer\AuctionController as BuyerAuctionController;
+use App\Http\Controllers\Buyer\BidController as BuyerBidController;
+use App\Http\Controllers\Buyer\CartController as BuyerCartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\buyer\OrderController as BuyerOrderController;
-use App\Http\Controllers\buyer\ProductController as BuyerProductController;
+use App\Http\Controllers\Buyer\OrderController as BuyerOrderController;
+use App\Http\Controllers\Buyer\ProductController as BuyerProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\buyer\StoreController as BuyerStoreController;
+use App\Http\Controllers\Buyer\StoreController as BuyerStoreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -168,5 +168,3 @@ Route::middleware(['auth', 'role:artisan', 'artisan.active'])->group(function ()
 Route::get('profile', [ProfileController::class, 'show'])
     ->middleware(['auth'])
     ->name('profile');
-
-require __DIR__.'/auth.php';
