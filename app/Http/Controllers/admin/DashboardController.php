@@ -6,7 +6,7 @@ use App\Enums\ArtisanStatus;
 use App\Enums\OrderStatus;
 use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
-use App\Models\Artisan;
+use Modules\Auth\Models\Artisan;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;

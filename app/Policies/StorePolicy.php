@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Store;
-use App\Models\User;
+use Modules\Auth\Models\User;
 
 class StorePolicy
 {

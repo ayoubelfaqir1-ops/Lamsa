@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Enums\ArtisanStatus;
 use App\Enums\OrderStatus;
 use App\Enums\ProductStatus;
-use App\Models\Artisan;
+use Modules\Auth\Models\Artisan;
 use App\Models\Auction;
 use App\Models\Category;
 use App\Models\Order;
@@ -13,7 +13,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\Store;
-use App\Models\User;
+use Modules\Auth\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Factories;
+namespace Modules\Auth\Database\Factories;
 
-use App\Models\User;
+use Modules\Auth\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    protected $model = User::class;
+
     public function definition(): array
     {
         return [

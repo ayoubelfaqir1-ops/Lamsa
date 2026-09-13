@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Enums\AuctionStatus;
 use App\Enums\OrderStatus;
 use App\Enums\ProductStatus;
-use App\Models\Artisan;
+use Modules\Auth\Models\Artisan;
 use App\Models\Bid;
 use App\Models\OrderItem;
 use App\Models\Review;

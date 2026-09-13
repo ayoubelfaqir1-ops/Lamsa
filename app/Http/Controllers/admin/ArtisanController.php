@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ArtisanStatus;
 use App\Http\Controllers\Controller;
-use App\Models\Artisan;
+use Modules\Auth\Models\Artisan;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 

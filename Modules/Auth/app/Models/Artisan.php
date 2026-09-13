@@ -1,8 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Auth\Models;
 
 use App\Enums\ArtisanStatus;
+use App\Models\Auction;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Store;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +16,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Artisan extends Model
 {
     use HasFactory;
+
+    protected static function newFactory()
+    {
+        return \Modules\Auth\Database\Factories\ArtisanFactory::new();
+    }
 
     protected $fillable = [
         'user_id', 'bio', 'city', 'region',

@@ -6,7 +6,7 @@ use App\Enums\OrderStatus;
 use App\Enums\ProductStatus;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Models\Artisan;
+use Modules\Auth\Models\Artisan;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

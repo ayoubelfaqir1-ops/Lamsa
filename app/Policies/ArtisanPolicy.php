@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Artisan;
-use App\Models\User;
+use Modules\Auth\Models\Artisan;
+use Modules\Auth\Models\User;
 
 class ArtisanPolicy
 {

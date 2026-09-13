@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Enums\OrderStatus;
 use App\Models\Review;
-use App\Models\User;
+use Modules\Auth\Models\User;
 
 class ReviewPolicy
 {

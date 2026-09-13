@@ -1,13 +1,16 @@
 <?php
 
-namespace Database\Factories;
+namespace Modules\Auth\Database\Factories;
 
 use App\Enums\ArtisanStatus;
-use App\Models\User;
+use Modules\Auth\Models\Artisan;
+use Modules\Auth\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ArtisanFactory extends Factory
 {
+    protected $model = Artisan::class;
+
     public function definition(): array
     {
         return [

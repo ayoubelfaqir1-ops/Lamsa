@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Artisan;
+use Modules\Auth\Models\Artisan;
 use App\Models\Category;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Factories\Factory;

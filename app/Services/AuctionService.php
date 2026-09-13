@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Enums\AuctionStatus;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
-use App\Models\Artisan;
+use Modules\Auth\Models\Artisan;
 use App\Models\Auction;
 use App\Models\Bid;
 use Illuminate\Support\Facades\Storage;

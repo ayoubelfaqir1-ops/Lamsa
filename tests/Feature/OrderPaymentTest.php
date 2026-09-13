@@ -3,8 +3,9 @@
 namespace Tests\Feature;
 
 use App\Enums\OrderStatus;
+use Modules\Auth\Models\Artisan;
 use App\Models\Order;
-use App\Models\User;
+use Modules\Auth\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

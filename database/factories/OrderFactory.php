@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Enums\OrderStatus;
-use App\Models\Artisan;
-use App\Models\User;
+use Modules\Auth\Models\Artisan;
+use Modules\Auth\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory

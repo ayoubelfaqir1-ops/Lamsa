@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use Modules\Auth\Models\User;
 use Livewire\Volt\Volt;
 
 test('profile page is displayed', function () {

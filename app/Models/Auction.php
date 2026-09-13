@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\AuctionStatus;
+use Modules\Auth\Models\Artisan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

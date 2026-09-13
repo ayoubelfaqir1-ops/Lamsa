@@ -3,11 +3,11 @@
 namespace Database\Factories;
 
 use App\Enums\AuctionStatus;
-use App\Models\Artisan;
+use Modules\Auth\Models\Artisan;
 use App\Models\Bid;
 use App\Models\Category;
 use App\Models\Store;
-use App\Models\User;
+use Modules\Auth\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;

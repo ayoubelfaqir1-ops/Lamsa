@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Artisan;
+use Modules\Auth\Models\Artisan;
+use Modules\Auth\Models\User;
 use App\Models\Auction;
 use App\Models\Bid;
 use App\Models\Store;
-use App\Models\User;
 
 function createLiveAuctionForArtisan(): array
 {

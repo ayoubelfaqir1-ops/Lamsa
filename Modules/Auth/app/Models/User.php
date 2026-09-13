@@ -1,20 +1,34 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Auth\Models;
 
+use App\Models\Bid;
+use App\Models\Cart;
+use App\Models\Favorite;
+use App\Models\Order;
+use App\Models\Review;
+use App\Models\Store;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Modules\Auth\Notifications\VerifyEmailNotification;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasRoles, HasFactory, Notifiable;
+    use HasApiTokens, HasRoles, HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'email', 'password', 'phone', 'address'];
+    protected static function newFactory()
+    {
+        return \Modules\Auth\Database\Factories\UserFactory::new();
+    }
+
+    protected $fillable = ['name', 'email', 'password', 'phone', 'address', 'avatar'];
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -24,6 +38,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    /**
+     * Send the queued email verification notification.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerifyEmailNotification());
     }
 
     public function isAdmin(): bool

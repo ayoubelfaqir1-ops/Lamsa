@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use Modules\Auth\Models\User;
 
 test('checkout redirects to profile when phone is missing', function () {
     $user = User::factory()->create([
