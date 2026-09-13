@@ -13,14 +13,14 @@ class EnsureArtisanIsActive
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
 
         // Ensure the user is authenticated and has an artisan profile
-        if (!$user || !$user->artisan) {
+        if (! $user || ! $user->artisan) {
             return redirect()->route('home');
         }
 
@@ -28,7 +28,7 @@ class EnsureArtisanIsActive
         if ($user->artisan->status !== ArtisanStatus::Active) {
             // Allow access ONLY to the dashboard (where the pending view is shown)
             // to avoid infinite loops if it redirects to itself.
-            if (!$request->routeIs('artisan.dashboard')) {
+            if (! $request->routeIs('artisan.dashboard')) {
                 return redirect()->route('artisan.dashboard');
             }
         }

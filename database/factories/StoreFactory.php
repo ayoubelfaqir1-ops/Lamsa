@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use Modules\Auth\Models\Artisan;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Modules\Auth\Models\Artisan;
 
 class StoreFactory extends Factory
 {
@@ -13,11 +13,11 @@ class StoreFactory extends Factory
         $name = fake()->company();
 
         return [
-            'artisan_id'  => Artisan::factory(),
-            'name'        => $name,
-            'slug'        => Str::slug($name) . '-' . Str::random(4),
+            'artisan_id' => Artisan::factory(),
+            'name' => $name,
+            'slug' => Str::slug($name).'-'.Str::random(4),
             'description' => fake()->paragraph(),
-            'is_active'   => true,
+            'is_active' => true,
         ];
     }
 }

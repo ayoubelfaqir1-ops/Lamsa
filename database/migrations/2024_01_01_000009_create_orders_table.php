@@ -32,7 +32,7 @@ return new class extends Migration
             $table->unsignedInteger('quantity');
             $table->decimal('unit_price', 10, 2);
             $table->timestamps();
-            
+
             $table->index('order_id');
             $table->index('product_id');
             $table->index('artisan_id');

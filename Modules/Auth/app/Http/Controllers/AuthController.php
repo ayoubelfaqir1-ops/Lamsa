@@ -3,22 +3,22 @@
 namespace Modules\Auth\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Auth\Models\Artisan;
-use Modules\Auth\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 use Modules\Auth\Events\ArtisanProfileCreated;
 use Modules\Auth\Events\UserRegistered;
-use Laravel\Socialite\Facades\Socialite;
 use Modules\Auth\Http\Requests\GoogleLoginRequest;
 use Modules\Auth\Http\Requests\LoginRequest;
 use Modules\Auth\Http\Requests\RegisterRequest;
 use Modules\Auth\Http\Requests\UpdatePasswordRequest;
 use Modules\Auth\Http\Requests\UpdateProfileRequest;
 use Modules\Auth\Http\Resources\UserResource;
+use Modules\Auth\Models\Artisan;
+use Modules\Auth\Models\User;
 
 class AuthController extends Controller
 {
@@ -30,11 +30,11 @@ class AuthController extends Controller
         $validated = $request->validated();
 
         $user = User::create([
-            'name'     => $validated['name'],
-            'email'    => $validated['email'],
+            'name' => $validated['name'],
+            'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'phone'    => $validated['phone'] ?? null,
-            'address'  => $validated['address'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'address' => $validated['address'] ?? null,
         ]);
 
         $role = $validated['role'];
@@ -44,12 +44,12 @@ class AuthController extends Controller
 
         if ($role === 'artisan') {
             $artisan = Artisan::create([
-                'user_id'    => $user->id,
-                'bio'        => $validated['bio'] ?? null,
-                'city'       => $validated['city'] ?? null,
-                'region'     => $validated['region'] ?? null,
+                'user_id' => $user->id,
+                'bio' => $validated['bio'] ?? null,
+                'city' => $validated['city'] ?? null,
+                'region' => $validated['region'] ?? null,
                 'craft_type' => $validated['craft_type'] ?? null,
-                'status'     => 'pending',
+                'status' => 'pending',
             ]);
 
             ArtisanProfileCreated::dispatch($artisan);
@@ -59,7 +59,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'User registered successfully. Please verify your email address before logging in.',
-            'user'    => new UserResource($user->load(['roles', 'artisan'])),
+            'user' => new UserResource($user->load(['roles', 'artisan'])),
         ], 201);
     }
 
@@ -79,20 +79,20 @@ class AuthController extends Controller
         }
 
         if (! $user->hasVerifiedEmail()) {
-            $cacheKey = 'resend_cooldown:' . $user->id;
+            $cacheKey = 'resend_cooldown:'.$user->id;
 
             if (! Cache::has($cacheKey)) {
                 $user->sendEmailVerificationNotification();
                 Cache::put($cacheKey, true, now()->addMinutes(2));
 
                 return response()->json([
-                    'message'        => 'Your email address is not verified. A fresh verification link has been sent to your inbox.',
+                    'message' => 'Your email address is not verified. A fresh verification link has been sent to your inbox.',
                     'email_verified' => false,
                 ], 403);
             }
 
             return response()->json([
-                'message'        => 'Your email address is not verified. A verification link was recently sent, please check your inbox and spam folder.',
+                'message' => 'Your email address is not verified. A verification link was recently sent, please check your inbox and spam folder.',
                 'email_verified' => false,
             ], 403);
         }
@@ -102,10 +102,10 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token', ['*'], $expiresAt)->plainTextToken;
 
         return response()->json([
-            'message'      => 'Login successful',
-            'token_type'   => 'Bearer',
+            'message' => 'Login successful',
+            'token_type' => 'Bearer',
             'access_token' => $token,
-            'user'         => new UserResource($user->load(['roles', 'artisan'])),
+            'user' => new UserResource($user->load(['roles', 'artisan'])),
         ]);
     }
 
@@ -142,23 +142,23 @@ class AuthController extends Controller
         $validated = $request->validated();
 
         $user->update(array_filter([
-            'name'    => $validated['name'] ?? null,
-            'phone'   => $validated['phone'] ?? null,
+            'name' => $validated['name'] ?? null,
+            'phone' => $validated['phone'] ?? null,
             'address' => $validated['address'] ?? null,
         ]));
 
         if ($user->isArtisan() && $user->artisan) {
             $user->artisan->update(array_filter([
-                'bio'        => $validated['bio'] ?? null,
-                'city'       => $validated['city'] ?? null,
-                'region'     => $validated['region'] ?? null,
+                'bio' => $validated['bio'] ?? null,
+                'city' => $validated['city'] ?? null,
+                'region' => $validated['region'] ?? null,
                 'craft_type' => $validated['craft_type'] ?? null,
             ]));
         }
 
         return response()->json([
             'message' => 'Profile updated successfully',
-            'user'    => new UserResource($user->fresh(['roles', 'artisan'])),
+            'user' => new UserResource($user->fresh(['roles', 'artisan'])),
         ]);
     }
 
@@ -219,11 +219,11 @@ class AuthController extends Controller
         } else {
             // Register new user via Google
             $user = User::forceCreate([
-                'name'              => $googleUser->getName() ?? 'User',
-                'email'             => $googleUser->getEmail(),
-                'provider_name'     => 'google',
-                'provider_id'       => $googleUser->getId(),
-                'avatar'            => $googleUser->getAvatar(),
+                'name' => $googleUser->getName() ?? 'User',
+                'email' => $googleUser->getEmail(),
+                'provider_name' => 'google',
+                'provider_id' => $googleUser->getId(),
+                'avatar' => $googleUser->getAvatar(),
                 'email_verified_at' => now(),
             ]);
 
@@ -236,10 +236,10 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token', ['*'], $expiresAt)->plainTextToken;
 
         return response()->json([
-            'message'      => 'Google authentication successful',
-            'token_type'   => 'Bearer',
+            'message' => 'Google authentication successful',
+            'token_type' => 'Bearer',
             'access_token' => $token,
-            'user'         => new UserResource($user->load(['roles', 'artisan'])),
+            'user' => new UserResource($user->load(['roles', 'artisan'])),
         ]);
     }
 

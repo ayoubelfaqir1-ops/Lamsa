@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Enums\AuctionStatus;
-use Modules\Auth\Models\Artisan;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Modules\Auth\Models\Artisan;
 
 class Auction extends Model
 {
@@ -27,14 +27,14 @@ class Auction extends Model
     protected function casts(): array
     {
         return [
-            'status'          => AuctionStatus::class,
-            'starting_price'  => 'decimal:2',
-            'reserve_price'   => 'decimal:2',
-            'current_price'   => 'decimal:2',
-            'starts_at'       => 'datetime',
-            'ends_at'         => 'datetime',
-            'images'          => 'array',
-            'is_published'    => 'boolean',
+            'status' => AuctionStatus::class,
+            'starting_price' => 'decimal:2',
+            'reserve_price' => 'decimal:2',
+            'current_price' => 'decimal:2',
+            'starts_at' => 'datetime',
+            'ends_at' => 'datetime',
+            'images' => 'array',
+            'is_published' => 'boolean',
         ];
     }
 

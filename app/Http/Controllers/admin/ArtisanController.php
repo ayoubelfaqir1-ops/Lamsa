@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\ArtisanStatus;
 use App\Http\Controllers\Controller;
-use Modules\Auth\Models\Artisan;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ArtisanController extends Controller

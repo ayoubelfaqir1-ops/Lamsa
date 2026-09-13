@@ -66,7 +66,6 @@ class StoreController extends Controller
             'is_active' => true,
         ]);
 
-
         return redirect()
             ->route('artisan.store.show', $artisan->store)
             ->with('success', 'Store created successfully.');

@@ -14,11 +14,11 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => ['sometimes', 'string', 'max:255'],
+            'name' => ['sometimes', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'image'       => ['nullable', 'string'],
-            'parent_id'   => ['nullable', 'exists:categories,id'],
-            'is_active'   => ['boolean'],
+            'image' => ['nullable', 'string'],
+            'parent_id' => ['nullable', 'exists:categories,id'],
+            'is_active' => ['boolean'],
         ];
     }
 }

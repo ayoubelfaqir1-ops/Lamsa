@@ -19,11 +19,11 @@ class BidController extends Controller
         $user = Auth::user();
         $artisan = $user->artisan;
 
-        if (!$artisan && !$user->hasRole('artisan')) {
+        if (! $artisan && ! $user->hasRole('artisan')) {
             return redirect()->route('home');
         }
 
-        if (!$artisan || $artisan->status === ArtisanStatus::Pending) {
+        if (! $artisan || $artisan->status === ArtisanStatus::Pending) {
             return view('artisan.pending', [
                 'status' => ArtisanStatus::Pending,
             ]);

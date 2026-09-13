@@ -14,12 +14,12 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'       => ['sometimes', 'string', 'max:255'],
-            'phone'      => ['nullable', 'string', 'max:20'],
-            'address'    => ['nullable', 'string', 'max:500'],
-            'bio'        => ['nullable', 'string', 'max:1000'],
-            'city'       => ['nullable', 'string', 'max:255'],
-            'region'     => ['nullable', 'string', 'max:255'],
+            'name' => ['sometimes', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'address' => ['nullable', 'string', 'max:500'],
+            'bio' => ['nullable', 'string', 'max:1000'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'region' => ['nullable', 'string', 'max:255'],
             'craft_type' => ['nullable', 'string', 'max:255'],
         ];
     }

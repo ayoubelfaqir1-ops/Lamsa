@@ -14,9 +14,9 @@ class StoreStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'logo'        => ['nullable', 'image','max:2078'],
+            'logo' => ['nullable', 'image', 'max:2078'],
         ];
     }
 }

@@ -5,10 +5,10 @@ namespace Modules\Auth\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\GoogleProvider;
 use Laravel\Socialite\Two\User as SocialiteUser;
-use Modules\Auth\Events\UserRegistered;
-use Modules\Auth\Models\User;
 use Mockery;
+use Modules\Auth\Events\UserRegistered;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -32,7 +32,7 @@ class GoogleAuthTest extends TestCase
         $abstractUser->shouldReceive('getEmail')->andReturn('googleuser@example.com');
         $abstractUser->shouldReceive('getAvatar')->andReturn('https://lh3.googleusercontent.com/avatar.jpg');
 
-        $provider = Mockery::mock(\Laravel\Socialite\Two\GoogleProvider::class);
+        $provider = Mockery::mock(GoogleProvider::class);
         $provider->shouldReceive('stateless')->andReturnSelf();
         $provider->shouldReceive('userFromToken')->with('valid-google-id-token')->andReturn($abstractUser);
 
@@ -52,14 +52,14 @@ class GoogleAuthTest extends TestCase
             ->assertJson([
                 'user' => [
                     'email' => 'googleuser@example.com',
-                    'role'  => 'buyer',
+                    'role' => 'buyer',
                 ],
             ]);
 
         $this->assertDatabaseHas('users', [
-            'email'         => 'googleuser@example.com',
+            'email' => 'googleuser@example.com',
             'provider_name' => 'google',
-            'provider_id'   => 'google-unique-id-123456',
+            'provider_id' => 'google-unique-id-123456',
         ]);
 
         Event::assertDispatched(UserRegistered::class);

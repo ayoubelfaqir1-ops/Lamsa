@@ -12,8 +12,7 @@ class StoreController extends Controller
 {
     public function __construct(
         private readonly StoreDetailService $storeDetailService,
-    ) {
-    }
+    ) {}
 
     public function index(): View
     {

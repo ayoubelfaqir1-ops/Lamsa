@@ -22,7 +22,7 @@ class ProductDetailService
             'reviews' => fn ($query) => $query->latest(),
             'reviews.user',
         ])->loadCount('reviews')
-          ->loadAvg('reviews', 'rating');
+            ->loadAvg('reviews', 'rating');
 
         $store = $product->store;
 

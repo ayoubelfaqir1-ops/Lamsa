@@ -8,16 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\OrderStatsService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class OrderController extends Controller
 {
     public function __construct(
         private readonly OrderStatsService $orderStatsService,
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -28,21 +27,21 @@ class OrderController extends Controller
         $artisan = $user->artisan;
 
         // If the user has no artisan profile and is just a buyer, redirect them out
-        if (!$artisan && !$user->hasRole('artisan')) {
+        if (! $artisan && ! $user->hasRole('artisan')) {
             return redirect()->route('home');
         }
 
         // If no artisan record exists yet but they have the role, or status is pending, show pending
-        if (!$artisan || $artisan->status === ArtisanStatus::Pending) {
+        if (! $artisan || $artisan->status === ArtisanStatus::Pending) {
             return view('artisan.pending', [
-                'status' => ArtisanStatus::Pending
+                'status' => ArtisanStatus::Pending,
             ]);
         }
 
         // Handle other non-active statuses (Suspended, Rejected)
         if ($artisan->status !== ArtisanStatus::Active) {
             return view('artisan.pending', [
-                'status' => $artisan->status
+                'status' => $artisan->status,
             ]);
         }
 
@@ -66,7 +65,7 @@ class OrderController extends Controller
     {
         $artisan = Auth::user()->artisan;
 
-        if (!$artisan || $order->artisan_id !== $artisan->id) {
+        if (! $artisan || $order->artisan_id !== $artisan->id) {
             return redirect()->route('artisan.orders');
         }
 

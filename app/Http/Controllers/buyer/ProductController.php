@@ -14,8 +14,7 @@ class ProductController extends Controller
 {
     public function __construct(
         private readonly ProductDetailService $productDetailService,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): View
     {

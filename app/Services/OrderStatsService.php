@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Enums\OrderStatus;
-use Modules\Auth\Models\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Modules\Auth\Models\Artisan;
 
 class OrderStatsService
 {

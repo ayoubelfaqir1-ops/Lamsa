@@ -10,7 +10,5 @@ class ArtisanProfileCreated
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public Artisan $artisan)
-    {
-    }
+    public function __construct(public Artisan $artisan) {}
 }

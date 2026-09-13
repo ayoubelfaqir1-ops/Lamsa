@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Artisan;
 
-use App\Http\Controllers\Controller;
 use App\Enums\ArtisanStatus;
+use App\Http\Controllers\Controller;
 use App\Services\ArtisanDashboardService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -14,8 +14,7 @@ class DashboardController extends Controller
 {
     public function __construct(
         private readonly ArtisanDashboardService $artisanDashboardService,
-    ) {
-    }
+    ) {}
 
     /**
      * Display the artisan studio dashboard or a pending approval page.
@@ -26,21 +25,21 @@ class DashboardController extends Controller
         $artisan = $user->artisan;
 
         // If the user has no artisan profile and is just a buyer, redirect them out
-        if (!$artisan && !$user->hasRole('artisan')) {
+        if (! $artisan && ! $user->hasRole('artisan')) {
             return redirect()->route('home');
         }
 
         // If no artisan record exists yet but they have the role, or status is pending, show pending
-        if (!$artisan || $artisan->status === ArtisanStatus::Pending) {
+        if (! $artisan || $artisan->status === ArtisanStatus::Pending) {
             return view('artisan.pending', [
-                'status' => ArtisanStatus::Pending
+                'status' => ArtisanStatus::Pending,
             ]);
         }
 
         // Handle other non-active statuses (Suspended, Rejected)
         if ($artisan->status !== ArtisanStatus::Active) {
             return view('artisan.pending', [
-                'status' => $artisan->status
+                'status' => $artisan->status,
             ]);
         }
 

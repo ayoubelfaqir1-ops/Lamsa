@@ -15,9 +15,9 @@ class UpdateArtisanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'bio'        => ['nullable', 'string'],
-            'city'       => ['nullable', 'string', 'max:100'],
-            'region'     => ['nullable', 'string', 'max:100'],
+            'bio' => ['nullable', 'string'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'region' => ['nullable', 'string', 'max:100'],
             'craft_type' => ['nullable', 'string', 'max:100'],
         ];
     }

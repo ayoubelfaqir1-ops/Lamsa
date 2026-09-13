@@ -8,24 +8,25 @@ use App\Models\Favorite;
 use App\Models\Order;
 use App\Models\Review;
 use App\Models\Store;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Modules\Auth\Notifications\VerifyEmailNotification;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Auth\Database\Factories\UserFactory;
+use Modules\Auth\Notifications\VerifyEmailNotification;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasRoles, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     protected static function newFactory()
     {
-        return \Modules\Auth\Database\Factories\UserFactory::new();
+        return UserFactory::new();
     }
 
     protected $fillable = ['name', 'email', 'password', 'phone', 'address', 'avatar'];
@@ -36,7 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
         ];
     }
 
@@ -45,7 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification(): void
     {
-        $this->notify(new VerifyEmailNotification());
+        $this->notify(new VerifyEmailNotification);
     }
 
     public function isAdmin(): bool

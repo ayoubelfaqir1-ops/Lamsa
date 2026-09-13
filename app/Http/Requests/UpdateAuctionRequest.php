@@ -30,8 +30,8 @@ class UpdateAuctionRequest extends FormRequest
             'starting_price' => ['sometimes', 'numeric', 'min:0'],
             'reserve_price' => ['nullable', 'numeric', 'min:0'],
             'starts_at' => ['sometimes', 'date'],
-            'ends_at'   => ['sometimes', 'date', 'after:starts_at'],
-            'status'    => ['sometimes', Rule::in(['active', 'ended', 'cancelled'])],
+            'ends_at' => ['sometimes', 'date', 'after:starts_at'],
+            'status' => ['sometimes', Rule::in(['active', 'ended', 'cancelled'])],
             'is_published' => ['sometimes', 'boolean'],
         ];
     }

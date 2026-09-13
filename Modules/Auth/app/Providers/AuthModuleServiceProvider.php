@@ -8,12 +8,11 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Modules\Auth\Console\CreateAdminCommand;
 
 class AuthModuleServiceProvider extends ServiceProvider
 {
-    public function register(): void
-    {
-    }
+    public function register(): void {}
 
     public function boot(): void
     {
@@ -22,13 +21,13 @@ class AuthModuleServiceProvider extends ServiceProvider
 
         Route::middleware('api')
             ->prefix('api/v1/auth')
-            ->group(__DIR__ . '/../../routes/api.php');
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'auth');
+            ->group(__DIR__.'/../../routes/api.php');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'auth');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                \Modules\Auth\Console\CreateAdminCommand::class,
+                CreateAdminCommand::class,
             ]);
         }
     }
@@ -61,4 +60,3 @@ class AuthModuleServiceProvider extends ServiceProvider
         });
     }
 }
-

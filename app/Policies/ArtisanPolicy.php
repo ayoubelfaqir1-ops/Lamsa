@@ -14,7 +14,10 @@ class ArtisanPolicy
 
     public function view(User $user, Artisan $artisan): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $user->artisan?->id === $artisan->id;
     }
 
@@ -25,7 +28,10 @@ class ArtisanPolicy
 
     public function update(User $user, Artisan $artisan): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $user->artisan?->id === $artisan->id;
     }
 

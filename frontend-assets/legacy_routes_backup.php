@@ -22,12 +22,12 @@ use App\Http\Controllers\Artisan\StoreController as ArtisanStoreController;
 use App\Http\Controllers\Buyer\AuctionController as BuyerAuctionController;
 use App\Http\Controllers\Buyer\BidController as BuyerBidController;
 use App\Http\Controllers\Buyer\CartController as BuyerCartController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Buyer\OrderController as BuyerOrderController;
 use App\Http\Controllers\Buyer\ProductController as BuyerProductController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Buyer\StoreController as BuyerStoreController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Public Guest Routes

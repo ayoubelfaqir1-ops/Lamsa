@@ -4,10 +4,10 @@ namespace Modules\Auth\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
 use Modules\Auth\Events\ArtisanProfileCreated;
 use Modules\Auth\Events\UserRegistered;
 use Modules\Auth\Models\User;
-use Illuminate\Support\Facades\Notification;
 use Modules\Auth\Notifications\VerifyEmailNotification;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -29,13 +29,13 @@ class ApiAuthTest extends TestCase
         Notification::fake();
 
         $response = $this->postJson('/api/v1/auth/register', [
-            'name'                  => 'Test Buyer',
-            'email'                 => 'buyer@example.com',
-            'password'              => 'LamsaSecure#2026!Pass',
+            'name' => 'Test Buyer',
+            'email' => 'buyer@example.com',
+            'password' => 'LamsaSecure#2026!Pass',
             'password_confirmation' => 'LamsaSecure#2026!Pass',
-            'role'                  => 'buyer',
-            'phone'                 => '+212600000000',
-            'address'               => 'Casablanca, Morocco',
+            'role' => 'buyer',
+            'phone' => '+212600000000',
+            'address' => 'Casablanca, Morocco',
         ]);
 
         $response->assertStatus(201)
@@ -59,15 +59,15 @@ class ApiAuthTest extends TestCase
         Event::fake();
 
         $response = $this->postJson('/api/v1/auth/register', [
-            'name'                  => 'Artisan Pottery',
-            'email'                 => 'artisan@example.com',
-            'password'              => 'LamsaSecure#2026!Pass',
+            'name' => 'Artisan Pottery',
+            'email' => 'artisan@example.com',
+            'password' => 'LamsaSecure#2026!Pass',
             'password_confirmation' => 'LamsaSecure#2026!Pass',
-            'role'                  => 'artisan',
-            'city'                  => 'Fes',
-            'region'                => 'Fes-Meknes',
-            'craft_type'            => 'pottery',
-            'bio'                   => 'Handmade ceramics from Fes.',
+            'role' => 'artisan',
+            'city' => 'Fes',
+            'region' => 'Fes-Meknes',
+            'craft_type' => 'pottery',
+            'bio' => 'Handmade ceramics from Fes.',
         ]);
 
         $response->assertStatus(201)
@@ -77,7 +77,7 @@ class ApiAuthTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('artisans', [
-            'city'   => 'Fes',
+            'city' => 'Fes',
             'status' => 'pending',
         ]);
 
@@ -88,13 +88,13 @@ class ApiAuthTest extends TestCase
     public function test_unverified_user_cannot_login(): void
     {
         $user = User::factory()->unverified()->create([
-            'email'    => 'unverified@example.com',
+            'email' => 'unverified@example.com',
             'password' => 'LamsaSecure#2026!Pass',
         ]);
         $user->assignRole('buyer');
 
         $response = $this->postJson('/api/v1/auth/login', [
-            'email'    => 'unverified@example.com',
+            'email' => 'unverified@example.com',
             'password' => 'LamsaSecure#2026!Pass',
         ]);
 
@@ -107,13 +107,13 @@ class ApiAuthTest extends TestCase
     public function test_verified_user_can_login_via_api(): void
     {
         $user = User::factory()->create([
-            'email'    => 'user@example.com',
+            'email' => 'user@example.com',
             'password' => 'LamsaSecure#2026!Pass',
         ]);
         $user->assignRole('buyer');
 
         $response = $this->postJson('/api/v1/auth/login', [
-            'email'    => 'user@example.com',
+            'email' => 'user@example.com',
             'password' => 'LamsaSecure#2026!Pass',
         ]);
 
@@ -131,13 +131,13 @@ class ApiAuthTest extends TestCase
         Notification::fake();
 
         $user = User::factory()->unverified()->create([
-            'email'    => 'unverified@example.com',
+            'email' => 'unverified@example.com',
             'password' => 'LamsaSecure#2026!Pass',
         ]);
 
         // First login attempt triggers auto-send
         $response = $this->postJson('/api/v1/auth/login', [
-            'email'    => 'unverified@example.com',
+            'email' => 'unverified@example.com',
             'password' => 'LamsaSecure#2026!Pass',
         ]);
 
@@ -150,7 +150,7 @@ class ApiAuthTest extends TestCase
 
         // Immediate second login attempt respects cooldown
         $secondResponse = $this->postJson('/api/v1/auth/login', [
-            'email'    => 'unverified@example.com',
+            'email' => 'unverified@example.com',
             'password' => 'LamsaSecure#2026!Pass',
         ]);
 
@@ -176,7 +176,7 @@ class ApiAuthTest extends TestCase
             ->assertJson([
                 'user' => [
                     'email' => $user->email,
-                    'role'  => 'buyer',
+                    'role' => 'buyer',
                 ],
             ]);
     }
@@ -187,7 +187,7 @@ class ApiAuthTest extends TestCase
         $user = User::factory()->create();
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)
             ->postJson('/api/v1/auth/logout');
 
         $response->assertOk()
@@ -198,30 +198,30 @@ class ApiAuthTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create([
-            'name'  => 'Old Name',
+            'name' => 'Old Name',
             'phone' => '+212600000000',
         ]);
         $user->assignRole('buyer');
 
         $response = $this->actingAs($user, 'sanctum')
             ->putJson('/api/v1/auth/profile', [
-                'name'    => 'New Name',
-                'phone'   => '+212611111111',
+                'name' => 'New Name',
+                'phone' => '+212611111111',
                 'address' => 'Marrakech, Morocco',
             ]);
 
         $response->assertOk()
             ->assertJson([
                 'message' => 'Profile updated successfully',
-                'user'    => [
-                    'name'  => 'New Name',
+                'user' => [
+                    'name' => 'New Name',
                     'phone' => '+212611111111',
                 ],
             ]);
 
         $this->assertDatabaseHas('users', [
-            'id'    => $user->id,
-            'name'  => 'New Name',
+            'id' => $user->id,
+            'name' => 'New Name',
             'phone' => '+212611111111',
         ]);
     }
@@ -236,8 +236,8 @@ class ApiAuthTest extends TestCase
 
         $response = $this->actingAs($user, 'sanctum')
             ->putJson('/api/v1/auth/password', [
-                'current_password'      => 'OldPassword#2026!Pass',
-                'password'              => 'NewPassword#2026!Pass',
+                'current_password' => 'OldPassword#2026!Pass',
+                'password' => 'NewPassword#2026!Pass',
                 'password_confirmation' => 'NewPassword#2026!Pass',
             ]);
 

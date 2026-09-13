@@ -34,7 +34,7 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Vérifiez votre adresse email - Lamsa')
             ->view('auth::emails.verify-email', [
-                'url'  => $verificationUrl,
+                'url' => $verificationUrl,
                 'user' => $notifiable,
             ]);
     }
@@ -48,7 +48,7 @@ class VerifyEmailNotification extends Notification implements ShouldQueue
             'verification.verify',
             Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
-                'id'   => $notifiable->getKey(),
+                'id' => $notifiable->getKey(),
                 'hash' => sha1($notifiable->getEmailForVerification()),
             ]
         );

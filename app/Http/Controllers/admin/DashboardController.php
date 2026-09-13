@@ -6,11 +6,11 @@ use App\Enums\ArtisanStatus;
 use App\Enums\OrderStatus;
 use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
-use Modules\Auth\Models\Artisan;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
+use Modules\Auth\Models\Artisan;
 
 class DashboardController extends Controller
 {

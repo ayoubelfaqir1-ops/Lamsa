@@ -15,7 +15,9 @@ class ReviewPolicy
 
     public function create(User $user, int $productId): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
 
         // Buyer can only review purchased products
         return $user->orders()
@@ -26,13 +28,19 @@ class ReviewPolicy
 
     public function update(User $user, Review $review): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $review->user_id === $user->id;
     }
 
     public function delete(User $user, Review $review): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $review->user_id === $user->id;
     }
 }

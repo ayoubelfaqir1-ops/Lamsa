@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
-use Modules\Auth\Models\Artisan;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\Auth\Models\Artisan;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderItem>
+ * @extends Factory<OrderItem>
  */
 class OrderItemFactory extends Factory
 {
@@ -22,14 +23,14 @@ class OrderItemFactory extends Factory
         $createdAt = fake()->dateTimeBetween('-4 months', 'now');
 
         return [
-            'order_id'    => Order::factory(),
-            'product_id'  => Product::factory(),
-            'artisan_id'  => Artisan::factory(),
-            'quantity'    => fake()->numberBetween(1, 5),
-            'unit_price'  => fake()->randomFloat(2, 20, 1000),
-            'status'      => 'pending',
-            'created_at'  => $createdAt,
-            'updated_at'  => $createdAt,
+            'order_id' => Order::factory(),
+            'product_id' => Product::factory(),
+            'artisan_id' => Artisan::factory(),
+            'quantity' => fake()->numberBetween(1, 5),
+            'unit_price' => fake()->randomFloat(2, 20, 1000),
+            'status' => 'pending',
+            'created_at' => $createdAt,
+            'updated_at' => $createdAt,
         ];
     }
 }

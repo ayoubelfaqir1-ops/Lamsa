@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Modules\Auth\Database\Factories\ArtisanFactory;
 
 class Artisan extends Model
 {
@@ -19,7 +20,7 @@ class Artisan extends Model
 
     protected static function newFactory()
     {
-        return \Modules\Auth\Database\Factories\ArtisanFactory::new();
+        return ArtisanFactory::new();
     }
 
     protected $fillable = [

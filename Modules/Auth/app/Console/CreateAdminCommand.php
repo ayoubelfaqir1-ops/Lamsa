@@ -44,6 +44,7 @@ class CreateAdminCommand extends Command
 
         if ($validator->fails()) {
             $this->error('Invalid email address provided.');
+
             return Command::FAILURE;
         }
 
@@ -51,6 +52,7 @@ class CreateAdminCommand extends Command
         if ($existingUser) {
             if (! $this->confirm("⚠️  A user with email [{$email}] already exists! Do you want to reset their password and elevate them to admin?")) {
                 $this->warn('Admin creation cancelled.');
+
                 return Command::SUCCESS;
             }
         }
@@ -60,6 +62,7 @@ class CreateAdminCommand extends Command
 
         if ($password !== $confirmPassword) {
             $this->error('Passwords do not match.');
+
             return Command::FAILURE;
         }
 
@@ -71,6 +74,7 @@ class CreateAdminCommand extends Command
             foreach ($passwordValidator->errors()->all() as $error) {
                 $this->error($error);
             }
+
             return Command::FAILURE;
         }
 

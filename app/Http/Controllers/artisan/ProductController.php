@@ -8,16 +8,15 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\ProductService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
     public function __construct(
         private readonly ProductService $productService,
-    ) {
-    }
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -28,7 +27,7 @@ class ProductController extends Controller
         $artisan = $user->artisan;
         $store = $artisan?->store;
 
-        if (!$store) {
+        if (! $store) {
             return redirect()
                 ->route('artisan.store.create')
                 ->with('success', 'Create your store before managing products.');
@@ -44,7 +43,7 @@ class ProductController extends Controller
     {
         $this->authorize('create', Product::class);
 
-        if (!Auth::user()->artisan?->store) {
+        if (! Auth::user()->artisan?->store) {
             return redirect()
                 ->route('artisan.store.create')
                 ->with('success', 'Create your store before adding products.');

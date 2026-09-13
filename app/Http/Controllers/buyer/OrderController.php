@@ -12,6 +12,7 @@ use App\Services\OrderCheckoutService;
 use App\Services\OrderPaymentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -48,7 +49,9 @@ class OrderController extends Controller
     public function cardPayment(Request $request): View|RedirectResponse
     {
         $orders = $this->resolvePendingOrders($request->query('orders'));
-        if ($orders instanceof RedirectResponse) return $orders;
+        if ($orders instanceof RedirectResponse) {
+            return $orders;
+        }
 
         $grandTotal = (float) $orders->sum('total_amount');
 
@@ -62,7 +65,9 @@ class OrderController extends Controller
         ]);
 
         $orders = $this->resolvePendingOrders($validated['orders']);
-        if ($orders instanceof RedirectResponse) return $orders;
+        if ($orders instanceof RedirectResponse) {
+            return $orders;
+        }
         $this->orderPaymentService->confirmCardPayment($orders);
 
         return redirect()
@@ -119,7 +124,7 @@ class OrderController extends Controller
         abort_unless($order->user_id === Auth::id(), 403);
     }
 
-    private function resolvePendingOrders(?string $orderIdsString): \Illuminate\Support\Collection|RedirectResponse
+    private function resolvePendingOrders(?string $orderIdsString): Collection|RedirectResponse
     {
         try {
             return $this->orderPaymentService->loadPendingBuyerOrders((string) $orderIdsString, Auth::id());
@@ -130,7 +135,7 @@ class OrderController extends Controller
         }
     }
 
-    private function finalizeCashOnDeliveryOrders(\Illuminate\Support\Collection $orders): RedirectResponse
+    private function finalizeCashOnDeliveryOrders(Collection $orders): RedirectResponse
     {
         $this->orderPaymentService->confirmCashOnDelivery($orders);
 
@@ -141,7 +146,7 @@ class OrderController extends Controller
                 : 'Your order was confirmed with cash on delivery and is now processing.');
     }
 
-    private function redirectToCardPayment(\Illuminate\Support\Collection $orders): RedirectResponse
+    private function redirectToCardPayment(Collection $orders): RedirectResponse
     {
         return redirect()
             ->route('orders.payment.card', ['orders' => $orders->pluck('id')->implode(',')])

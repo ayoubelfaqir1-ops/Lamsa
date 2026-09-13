@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Review;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreReviewRequest extends FormRequest
@@ -9,15 +10,16 @@ class StoreReviewRequest extends FormRequest
     public function authorize(): bool
     {
         $productId = $this->input('product_id');
-        return $this->user()->can('create', [\App\Models\Review::class, $productId]);
+
+        return $this->user()->can('create', [Review::class, $productId]);
     }
 
     public function rules(): array
     {
         return [
             'product_id' => ['required', 'exists:products,id'],
-            'rating'     => ['required', 'integer', 'min:1', 'max:5'],
-            'comment'    => ['nullable', 'string', 'max:1000'],
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+            'comment' => ['nullable', 'string', 'max:1000'],
         ];
     }
 }

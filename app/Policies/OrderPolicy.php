@@ -14,7 +14,10 @@ class OrderPolicy
 
     public function view(User $user, Order $order): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $order->user_id === $user->id;
     }
 
@@ -30,7 +33,10 @@ class OrderPolicy
 
     public function cancel(User $user, Order $order): bool
     {
-        if ($user->hasRole('admin')) return true;
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
         return $order->user_id === $user->id;
     }
 }
