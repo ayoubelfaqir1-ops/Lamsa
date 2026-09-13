@@ -157,32 +157,14 @@ parameters:
 			path: app/Http/Controllers/Admin/ArtisanController.php
 
 		-
-			message: '#^Call to an undefined method App\\Models\\Category\:\:products\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Http/Controllers/Admin/CategoryController.php
-
-		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 3
 			path: app/Http/Controllers/Admin/CategoryController.php
 
 		-
-			message: '#^Relation ''products'' is not found in App\\Models\\Category model\.$#'
-			identifier: larastan.relationExistence
-			count: 2
-			path: app/Http/Controllers/Admin/CategoryController.php
-
-		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Admin/DashboardController.php
-
-		-
-			message: '#^Relation ''category'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
 			count: 1
 			path: app/Http/Controllers/Admin/DashboardController.php
 
@@ -235,12 +217,6 @@ parameters:
 			path: app/Http/Controllers/Artisan/BidController.php
 
 		-
-			message: '#^Relation ''auction'' is not found in App\\Models\\Bid model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Artisan/BidController.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
 			identifier: property.notFound
 			count: 1
@@ -289,21 +265,15 @@ parameters:
 			path: app/Http/Controllers/Artisan/OrderController.php
 
 		-
+			message: '#^Parameter \#1 \$currentStatus of method App\\Http\\Controllers\\Artisan\\OrderController\:\:canTransitionTo\(\) expects App\\Enums\\OrderStatus, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/Artisan/OrderController.php
+
+		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 4
-			path: app/Http/Controllers/Artisan/OrderController.php
-
-		-
-			message: '#^Relation ''items'' is not found in App\\Models\\Order model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Artisan/OrderController.php
-
-		-
-			message: '#^Relation ''user'' is not found in App\\Models\\Order model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
 			path: app/Http/Controllers/Artisan/OrderController.php
 
 		-
@@ -349,8 +319,8 @@ parameters:
 			path: app/Http/Controllers/Artisan/StoreController.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\Auction\>\:\:published\(\)\.$#'
-			identifier: method.notFound
+			message: '#^Call to function abort_unless\(\) with false and 404 will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: app/Http/Controllers/Buyer/AuctionController.php
 
@@ -361,33 +331,51 @@ parameters:
 			path: app/Http/Controllers/Buyer/AuctionController.php
 
 		-
-			message: '#^Relation ''bids'' is not found in App\\Models\\Auction model\.$#'
-			identifier: larastan.relationExistence
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 1
+			path: app/Http/Controllers/Buyer/AuctionController.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between string and App\\Enums\\AuctionStatus\:\:Active will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Http/Controllers/Buyer/AuctionController.php
+
+		-
+			message: '#^Cannot call method isFuture\(\) on string\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Http/Controllers/Buyer/BidController.php
+
+		-
+			message: '#^Cannot call method isPast\(\) on string\.$#'
+			identifier: method.nonObject
 			count: 2
-			path: app/Http/Controllers/Buyer/AuctionController.php
-
-		-
-			message: '#^Relation ''category'' is not found in App\\Models\\Auction model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Buyer/AuctionController.php
-
-		-
-			message: '#^Relation ''store'' is not found in App\\Models\\Auction model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Buyer/AuctionController.php
-
-		-
-			message: '#^Call to an undefined method App\\Models\\Auction\:\:bids\(\)\.$#'
-			identifier: method.notFound
-			count: 1
 			path: app/Http/Controllers/Buyer/BidController.php
 
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 1
+			path: app/Http/Controllers/Buyer/BidController.php
+
+		-
+			message: '#^Result of \|\| is always true\.$#'
+			identifier: booleanOr.alwaysTrue
+			count: 3
+			path: app/Http/Controllers/Buyer/BidController.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between string and App\\Enums\\AuctionStatus\:\:Active will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: app/Http/Controllers/Buyer/BidController.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 2
 			path: app/Http/Controllers/Buyer/BidController.php
 
 		-
@@ -397,21 +385,9 @@ parameters:
 			path: app/Http/Controllers/Buyer/CartController.php
 
 		-
-			message: '#^Call to an undefined method App\\Models\\Category\:\:products\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Http/Controllers/Buyer/CategoryController.php
-
-		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 2
-			path: app/Http/Controllers/Buyer/CategoryController.php
-
-		-
-			message: '#^Relation ''products'' is not found in App\\Models\\Category model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
 			path: app/Http/Controllers/Buyer/CategoryController.php
 
 		-
@@ -427,8 +403,14 @@ parameters:
 			path: app/Http/Controllers/Buyer/OrderController.php
 
 		-
-			message: '#^Relation ''items'' is not found in App\\Models\\Order model\.$#'
-			identifier: larastan.relationExistence
+			message: '#^Strict comparison using \!\=\= between string and App\\Enums\\OrderStatus\:\:Pending will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Http/Controllers/Buyer/OrderController.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
 			count: 1
 			path: app/Http/Controllers/Buyer/OrderController.php
 
@@ -439,51 +421,15 @@ parameters:
 			path: app/Http/Controllers/Buyer/ProductController.php
 
 		-
-			message: '#^Relation ''category'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Buyer/ProductController.php
-
-		-
-			message: '#^Relation ''reviews'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
-			count: 2
-			path: app/Http/Controllers/Buyer/ProductController.php
-
-		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 2
 			path: app/Http/Controllers/Buyer/StoreController.php
 
 		-
-			message: '#^Relation ''products'' is not found in App\\Models\\Store model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/Buyer/StoreController.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\Auction\>\:\:published\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Http/Controllers/HomeController.php
-
-		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 1
-			path: app/Http/Controllers/HomeController.php
-
-		-
-			message: '#^Relation ''bids'' is not found in App\\Models\\Auction model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Http/Controllers/HomeController.php
-
-		-
-			message: '#^Relation ''reviews'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
-			count: 2
 			path: app/Http/Controllers/HomeController.php
 
 		-
@@ -811,10 +757,10 @@ parameters:
 			path: app/Policies/AuctionPolicy.php
 
 		-
-			message: '#^Call to an undefined method App\\Models\\Auction\:\:canAcceptBids\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Policies/AuctionPolicy.php
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$artisan_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Policies/ProductPolicy.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
@@ -829,43 +775,37 @@ parameters:
 			path: app/Policies/ProductPolicy.php
 
 		-
-			message: '#^Right side of && is always true\.$#'
-			identifier: booleanAnd.rightAlwaysTrue
-			count: 2
-			path: app/Policies/ProductPolicy.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
 			identifier: property.notFound
 			count: 2
 			path: app/Policies/StorePolicy.php
 
 		-
-			message: '#^Relation ''auction'' is not found in App\\Models\\Bid model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Services/ArtisanDashboardService.php
-
-		-
-			message: '#^Relation ''order'' is not found in App\\Models\\OrderItem model\.$#'
-			identifier: larastan.relationExistence
-			count: 3
-			path: app/Services/ArtisanDashboardService.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
 			identifier: property.notFound
 			count: 1
 			path: app/Services/AuctionService.php
 
 		-
-			message: '#^Call to an undefined method App\\Models\\Auction\:\:bids\(\)\.$#'
-			identifier: method.notFound
-			count: 3
+			message: '#^Cannot call method isPast\(\) on string\.$#'
+			identifier: method.nonObject
+			count: 1
 			path: app/Services/AuctionService.php
 
 		-
-			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Support\\Carbon\. Use \-\> instead\.$#'
+			message: '#^Strict comparison using \!\=\= between string and App\\Enums\\AuctionStatus\:\:Active will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/AuctionService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Services/AuctionService.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type string\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
 			count: 1
 			path: app/Services/AuctionService.php
@@ -877,9 +817,21 @@ parameters:
 			path: app/Services/CartService.php
 
 		-
-			message: '#^Call to an undefined method App\\Models\\Cart\:\:items\(\)\.$#'
-			identifier: method.notFound
-			count: 8
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/CartService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$product\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Services/CartService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$quantity\.$#'
+			identifier: property.notFound
+			count: 3
 			path: app/Services/CartService.php
 
 		-
@@ -895,21 +847,27 @@ parameters:
 			path: app/Services/CartService.php
 
 		-
-			message: '#^Relation ''category'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
+			message: '#^Result of \|\| is always true\.$#'
+			identifier: booleanOr.alwaysTrue
+			count: 2
 			path: app/Services/CartService.php
 
 		-
-			message: '#^Relation ''store'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
+			message: '#^Strict comparison using \!\=\= between ''active''\|''inactive''\|''pending''\|''suspended'' and App\\Enums\\ProductStatus\:\:Active will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: app/Services/CartService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 2
 			path: app/Services/CartService.php
 
 		-
 			message: '#^Using nullsafe property access "\?\-\>quantity" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
-			count: 2
+			count: 1
 			path: app/Services/CartService.php
 
 		-
@@ -919,32 +877,50 @@ parameters:
 			path: app/Services/OrderCheckoutService.php
 
 		-
-			message: '#^If condition is always true\.$#'
-			identifier: if.alwaysTrue
+			message: '#^Result of \|\| is always true\.$#'
+			identifier: booleanOr.alwaysTrue
+			count: 1
+			path: app/Services/OrderCheckoutService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between ''active''\|''inactive''\|''pending''\|''suspended'' and App\\Enums\\ProductStatus\:\:Active will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/OrderCheckoutService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Services/OrderCheckoutService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between string and App\\Enums\\OrderStatus\:\:Pending will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/OrderPaymentService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Services/ProductDetailService.php
+
+		-
+			message: '#^Call to function abort_unless\(\) with false and 404 will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: app/Services/ProductDetailService.php
 
 		-
-			message: '#^Relation ''artisan'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
 			count: 1
 			path: app/Services/ProductDetailService.php
 
 		-
-			message: '#^Relation ''category'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Services/ProductDetailService.php
-
-		-
-			message: '#^Relation ''reviews'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
-			count: 5
-			path: app/Services/ProductDetailService.php
-
-		-
-			message: '#^Relation ''store'' is not found in App\\Models\\Product model\.$#'
-			identifier: larastan.relationExistence
+			message: '#^Strict comparison using \=\=\= between ''active''\|''inactive''\|''pending''\|''suspended'' and App\\Enums\\ProductStatus\:\:Active will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: app/Services/ProductDetailService.php
 
@@ -959,24 +935,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: app/Services/ProductService.php
-
-		-
-			message: '#^Call to an undefined method App\\Models\\Store\:\:products\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Services/StoreDetailService.php
-
-		-
-			message: '#^Relation ''artisan'' is not found in App\\Models\\Store model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Services/StoreDetailService.php
-
-		-
-			message: '#^Relation ''product'' is not found in App\\Models\\Review model\.$#'
-			identifier: larastan.relationExistence
-			count: 1
-			path: app/Services/StoreDetailService.php
 
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
