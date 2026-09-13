@@ -5,10 +5,10 @@ namespace App\Services;
 use App\Enums\AuctionStatus;
 use App\Enums\OrderStatus;
 use App\Enums\ProductStatus;
-use App\Models\Artisan;
 use App\Models\Bid;
 use App\Models\OrderItem;
 use App\Models\Review;
+use Modules\Auth\Models\Artisan;
 
 class ArtisanDashboardService
 {
@@ -64,7 +64,7 @@ class ArtisanDashboardService
     {
         return OrderItem::query()
             ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month")
-            ->selectRaw("SUM(quantity * unit_price) as revenue")
+            ->selectRaw('SUM(quantity * unit_price) as revenue')
             ->where('artisan_id', $artisan->id)
             ->whereHas('order', fn ($query) => $query->where('status', OrderStatus::Delivered))
             ->where('created_at', '>=', now()->subMonths(5)->startOfMonth())

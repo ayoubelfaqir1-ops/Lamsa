@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Auth\Models\User;
 
 class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'artisan_id','status', 'total_amount',
+        'user_id', 'artisan_id', 'status', 'total_amount',
         'shipping_address', 'payment_method',
         'payment_status', 'notes',
     ];
@@ -21,7 +22,7 @@ class Order extends Model
     protected function casts(): array
     {
         return [
-            'status'       => OrderStatus::class,
+            'status' => OrderStatus::class,
             'total_amount' => 'decimal:2',
         ];
     }

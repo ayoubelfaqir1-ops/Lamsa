@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return response()->json([
-        'name'    => config('app.name', 'Lamsa API'),
+        'name' => config('app.name', 'Lamsa API'),
         'version' => '1.0.0',
-        'status'  => 'healthy',
-        'docs'    => url('/api/v1/auth/auth-test'),
+        'status' => 'healthy',
+        'docs' => url('/api/v1/auth/auth-test'),
     ]);
 });

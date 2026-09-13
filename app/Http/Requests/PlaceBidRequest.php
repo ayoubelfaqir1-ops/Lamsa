@@ -14,7 +14,7 @@ class PlaceBidRequest extends FormRequest
     public function rules(): array
     {
         $auction = $this->route('auction');
-        $minBid  = $auction->minimumNextBid();
+        $minBid = $auction->minimumNextBid();
 
         return [
             'amount' => ['required', 'numeric', "min:{$minBid}"],

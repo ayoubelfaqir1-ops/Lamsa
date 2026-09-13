@@ -3,14 +3,14 @@
 namespace Database\Factories;
 
 use App\Enums\AuctionStatus;
-use App\Models\Artisan;
 use App\Models\Bid;
 use App\Models\Category;
 use App\Models\Store;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Modules\Auth\Models\Artisan;
+use Modules\Auth\Models\User;
 
 class AuctionFactory extends Factory
 {
@@ -21,23 +21,23 @@ class AuctionFactory extends Factory
         $artisan = Artisan::factory();
 
         return [
-            'store_id'       => Store::factory(['artisan_id' => $artisan]),
-            'artisan_id'     => $artisan,
-            'category_id'    => Category::factory(),
-            'name'           => $name,
-            'slug'           => Str::slug($name) . '-' . Str::random(4),
-            'description'    => fake()->paragraph(),
-            'images'         => [
+            'store_id' => Store::factory(['artisan_id' => $artisan]),
+            'artisan_id' => $artisan,
+            'category_id' => Category::factory(),
+            'name' => $name,
+            'slug' => Str::slug($name).'-'.Str::random(4),
+            'description' => fake()->paragraph(),
+            'images' => [
                 fake()->imageUrl(1200, 900, 'craft', true),
                 fake()->imageUrl(1200, 900, 'craft', true),
             ],
             'starting_price' => $startingPrice,
-            'current_price'  => $startingPrice,
-            'reserve_price'  => $startingPrice * 1.5,
-            'status'         => AuctionStatus::Active,
-            'is_published'   => true,
-            'starts_at'      => now()->subHours(fake()->numberBetween(4, 48)),
-            'ends_at'        => now()->addDays(fake()->numberBetween(2, 9)),
+            'current_price' => $startingPrice,
+            'reserve_price' => $startingPrice * 1.5,
+            'status' => AuctionStatus::Active,
+            'is_published' => true,
+            'starts_at' => now()->subHours(fake()->numberBetween(4, 48)),
+            'ends_at' => now()->addDays(fake()->numberBetween(2, 9)),
         ];
     }
 

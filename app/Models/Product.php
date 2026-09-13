@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Auth\Models\Artisan;
 
 class Product extends Model
 {
@@ -23,10 +24,10 @@ class Product extends Model
     protected function casts(): array
     {
         return [
-            'images'       => 'array',
-            'status'       => ProductStatus::class,
+            'images' => 'array',
+            'status' => ProductStatus::class,
             'is_published' => 'boolean',
-            'price'        => 'decimal:2',
+            'price' => 'decimal:2',
         ];
     }
 

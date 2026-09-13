@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Auction;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\Auth\Models\User;
 
 class BidFactory extends Factory
 {

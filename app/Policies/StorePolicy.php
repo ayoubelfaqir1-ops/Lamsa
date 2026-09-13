@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Store;
-use App\Models\User;
+use Modules\Auth\Models\User;
 
 class StorePolicy
 {
@@ -24,13 +24,19 @@ class StorePolicy
 
     public function update(User $user, Store $store): bool
     {
-        if ($user->hasRole('admin')) return true;
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
         return $user->hasRole('artisan') && $user->artisan?->id === $store->artisan_id;
     }
 
     public function delete(User $user, Store $store): bool
     {
-        if ($user->hasRole('admin')) return true;
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
         return $user->hasRole('artisan') && $user->artisan?->id === $store->artisan_id;
     }
 }

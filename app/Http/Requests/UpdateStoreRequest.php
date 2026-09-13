@@ -17,10 +17,10 @@ class UpdateStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => ['sometimes', 'string', 'max:255'],
+            'name' => ['sometimes', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'logo'        => ['nullable', 'image', 'max:2078'],
-            'is_active'   => ['boolean'],
+            'logo' => ['nullable', 'image', 'max:2078'],
+            'is_active' => ['boolean'],
         ];
     }
 }

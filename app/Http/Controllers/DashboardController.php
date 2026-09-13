@@ -21,7 +21,7 @@ class DashboardController extends Controller
         if ($user->hasRole('artisan')) {
             return redirect()->route('artisan.dashboard');
         }
-        
+
         return redirect()->route('home');
     }
 }
