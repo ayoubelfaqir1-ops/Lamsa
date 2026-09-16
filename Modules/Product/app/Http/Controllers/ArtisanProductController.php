@@ -5,6 +5,7 @@ namespace Modules\Product\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Modules\Auth\Models\User;
 use Modules\Product\Http\Requests\StoreProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
 use Modules\Product\Models\Product;
@@ -18,7 +19,7 @@ class ArtisanProductController extends Controller
 
     public function index(): JsonResponse
     {
-        /** @var \Modules\Auth\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $artisan = $user->artisan;
         $store = $artisan?->store;
@@ -38,10 +39,10 @@ class ArtisanProductController extends Controller
     {
         $this->authorize('create', Product::class);
 
-        /** @var \Modules\Auth\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $artisan = $user->artisan;
-        
+
         abort_if(! $artisan, 403, 'Artisan profile required.');
 
         $validated = $request->validated();
@@ -57,7 +58,7 @@ class ArtisanProductController extends Controller
     public function show(Product $product): JsonResponse
     {
         $this->authorize('update', $product);
-        
+
         $product->load('category');
 
         return response()->json([

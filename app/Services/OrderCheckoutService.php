@@ -3,12 +3,12 @@
 namespace App\Services;
 
 use App\Enums\OrderStatus;
-use Modules\Product\Enums\ProductStatus;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
+use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Product;
 
 class OrderCheckoutService

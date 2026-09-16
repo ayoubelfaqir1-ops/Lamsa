@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ArtisanStatus;
 use App\Enums\OrderStatus;
-use Modules\Product\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use Modules\Auth\Models\Artisan;
+use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Product;
 
 class DashboardController extends Controller

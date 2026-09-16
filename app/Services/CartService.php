@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use Modules\Product\Enums\ProductStatus;
 use App\Models\Cart;
 use Illuminate\Support\Collection;
+use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Product;
 use RuntimeException;
 

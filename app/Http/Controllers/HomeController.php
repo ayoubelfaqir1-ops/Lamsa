@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AuctionStatus;
-use Modules\Product\Enums\ProductStatus;
 use App\Models\Auction;
 use Illuminate\Contracts\View\View;
+use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Category;
 use Modules\Product\Models\Product;
 

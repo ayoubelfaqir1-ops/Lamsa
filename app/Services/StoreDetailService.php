@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use Modules\Product\Enums\ProductStatus;
 use App\Models\Store;
+use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Review;
 
 class StoreDetailService

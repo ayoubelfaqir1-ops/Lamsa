@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Policies;
 
+use Modules\Auth\Models\Artisan;
 use Modules\Auth\Models\User;
 use Modules\Product\Models\Product;
 
@@ -28,9 +29,9 @@ class ProductPolicy
         }
 
         // Artisan must have a store to create products
-        /** @var \Modules\Auth\Models\Artisan|null $artisan */
+        /** @var Artisan|null $artisan */
         $artisan = $user->artisan;
-        
+
         return $artisan && $artisan->store;
     }
 
@@ -40,7 +41,7 @@ class ProductPolicy
             return true;
         }
 
-        /** @var \Modules\Auth\Models\Artisan|null $artisan */
+        /** @var Artisan|null $artisan */
         $artisan = $user->artisan;
 
         return $user->hasRole('artisan') && $product->store && $artisan?->id === $product->store->artisan_id;
@@ -52,7 +53,7 @@ class ProductPolicy
             return true;
         }
 
-        /** @var \Modules\Auth\Models\Artisan|null $artisan */
+        /** @var Artisan|null $artisan */
         $artisan = $user->artisan;
 
         return $user->hasRole('artisan') && $product->store && $artisan?->id === $product->store->artisan_id;

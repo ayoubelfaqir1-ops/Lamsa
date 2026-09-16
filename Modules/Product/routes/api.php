@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Product\Http\Controllers\ArtisanProductController;
 use Modules\Product\Http\Controllers\CategoryController;
 use Modules\Product\Http\Controllers\ProductCatalogController;
-use Modules\Product\Http\Controllers\ArtisanProductController;
 
 Route::middleware('throttle:catalog')->group(function () {
     Route::get('/products', [ProductCatalogController::class, 'index']);

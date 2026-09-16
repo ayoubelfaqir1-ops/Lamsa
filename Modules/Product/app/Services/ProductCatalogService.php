@@ -2,10 +2,10 @@
 
 namespace Modules\Product\Services;
 
-use Modules\Product\Enums\ProductStatus;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Category;
 use Modules\Product\Models\Product;
 

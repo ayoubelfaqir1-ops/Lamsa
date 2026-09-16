@@ -2,11 +2,11 @@
 
 namespace Modules\Product\Database\Factories;
 
-use Modules\Product\Enums\ProductStatus;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Modules\Auth\Models\Artisan;
+use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Category;
 use Modules\Product\Models\Product;
 

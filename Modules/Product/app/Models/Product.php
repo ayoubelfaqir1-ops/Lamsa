@@ -2,7 +2,6 @@
 
 namespace Modules\Product\Models;
 
-use Modules\Product\Enums\ProductStatus;
 use App\Models\Favorite;
 use App\Models\OrderItem;
 use App\Models\Store;
@@ -15,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Modules\Auth\Models\Artisan;
 use Modules\Product\Database\Factories\ProductFactory;
+use Modules\Product\Enums\ProductStatus;
 
 /**
  * @property int $id
