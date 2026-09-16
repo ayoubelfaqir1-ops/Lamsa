@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Buyer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCartItemRequest;
 use App\Http\Requests\UpdateCartItemRequest;
-use App\Models\Product;
 use App\Services\CartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Modules\Product\Models\Product;
 
 class CartController extends Controller
 {

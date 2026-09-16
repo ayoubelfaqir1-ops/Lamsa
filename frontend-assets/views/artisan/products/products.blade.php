@@ -1,5 +1,5 @@
 @php
-    use App\Enums\ProductStatus;
+    use Modules\Product\Enums\ProductStatus;
 
     $sidebarItems = \App\View\ArtisanSidebar::items('products', auth()->user()->artisan?->store);
 @endphp

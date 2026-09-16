@@ -6,7 +6,6 @@ use App\Models\Bid;
 use App\Models\Cart;
 use App\Models\Favorite;
 use App\Models\Order;
-use App\Models\Review;
 use App\Models\Store;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,8 +17,18 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Auth\Database\Factories\UserFactory;
 use Modules\Auth\Notifications\VerifyEmailNotification;
+use Modules\Product\Models\Review;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string|null $phone
+ * @property string|null $address
+ * @property Artisan|null $artisan
+ * @property Store|null $store
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, HasRoles, Notifiable;

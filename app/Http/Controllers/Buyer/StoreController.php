@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Buyer;
 
-use App\Enums\ProductStatus;
+use Modules\Product\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Store;
 use App\Services\StoreDetailService;

@@ -4,9 +4,9 @@ namespace Database\Factories;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Auth\Models\Artisan;
+use Modules\Product\Models\Product;
 
 /**
  * @extends Factory<OrderItem>

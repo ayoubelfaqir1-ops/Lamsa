@@ -5,7 +5,6 @@ namespace Modules\Auth\Models;
 use App\Enums\ArtisanStatus;
 use App\Models\Auction;
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +12,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\Auth\Database\Factories\ArtisanFactory;
+use Modules\Product\Models\Product;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string|null $bio
+ * @property string|null $city
+ * @property string|null $region
+ * @property string|null $craft_type
+ * @property ArtisanStatus $status
+ * @property-read User|null $user
+ * @property-read Store|null $store
+ */
 class Artisan extends Model
 {
     use HasFactory;
@@ -40,6 +51,9 @@ class Artisan extends Model
         return $query->where('status', ArtisanStatus::Active);
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
