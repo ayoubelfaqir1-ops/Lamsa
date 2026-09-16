@@ -7,11 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAuctionRequest;
 use App\Http\Requests\UpdateAuctionRequest;
 use App\Models\Auction;
-use App\Models\Category;
 use App\Services\AuctionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Modules\Product\Models\Category;
 
 class AuctionController extends Controller
 {

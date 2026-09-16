@@ -4,11 +4,11 @@ namespace App\Services;
 
 use App\Enums\AuctionStatus;
 use App\Enums\OrderStatus;
-use App\Enums\ProductStatus;
 use App\Models\Bid;
 use App\Models\OrderItem;
-use App\Models\Review;
 use Modules\Auth\Models\Artisan;
+use Modules\Product\Enums\ProductStatus;
+use Modules\Product\Models\Review;
 
 class ArtisanDashboardService
 {

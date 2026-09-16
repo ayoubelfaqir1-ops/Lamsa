@@ -6,7 +6,6 @@ use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
-use App\Models\Product;
 use App\Services\CartService;
 use App\Services\OrderCheckoutService;
 use App\Services\OrderPaymentService;
@@ -15,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Modules\Product\Models\Product;
 
 class OrderController extends Controller
 {

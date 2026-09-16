@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Enums\ProductStatus;
 use App\Models\Cart;
-use App\Models\Product;
 use Illuminate\Support\Collection;
+use Modules\Product\Enums\ProductStatus;
+use Modules\Product\Models\Product;
 use RuntimeException;
 
 class CartService

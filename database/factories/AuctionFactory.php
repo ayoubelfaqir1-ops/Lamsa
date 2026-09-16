@@ -4,13 +4,13 @@ namespace Database\Factories;
 
 use App\Enums\AuctionStatus;
 use App\Models\Bid;
-use App\Models\Category;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Modules\Auth\Models\Artisan;
 use Modules\Auth\Models\User;
+use Modules\Product\Models\Category;
 
 class AuctionFactory extends Factory
 {

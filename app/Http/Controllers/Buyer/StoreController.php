@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Buyer;
 
-use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Store;
 use App\Services\StoreDetailService;
 use Illuminate\View\View;
+use Modules\Product\Enums\ProductStatus;
 
 class StoreController extends Controller
 {

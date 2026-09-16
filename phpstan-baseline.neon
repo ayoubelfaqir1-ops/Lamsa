@@ -1,19 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Access to an undefined property Modules\\Auth\\Models\\User\:\:\$email\.$#'
-			identifier: property.notFound
-			count: 2
-			path: Modules/Auth/app/Console/CreateAdminCommand.php
-
-		-
 			message: '#^Access to an undefined property Modules\\Auth\\Models\\User\:\:\$email_verified_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/Auth/app/Console/CreateAdminCommand.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Auth\\Models\\User\:\:\$name\.$#'
 			identifier: property.notFound
 			count: 1
 			path: Modules/Auth/app/Console/CreateAdminCommand.php
@@ -127,28 +115,10 @@ parameters:
 			path: Modules/Auth/app/Http/Resources/UserResource.php
 
 		-
-			message: '#^Access to an undefined property Modules\\Auth\\Models\\User\:\:\$address\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/Auth/app/Models/User.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Auth\\Models\\User\:\:\$phone\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/Auth/app/Models/User.php
-
-		-
 			message: '#^Call to an undefined method Faker\\Generator\:\:state\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: Modules/Auth/database/factories/ArtisanFactory.php
-
-		-
-			message: '#^Access to an undefined property Modules\\Auth\\Models\\User\:\:\$email\.$#'
-			identifier: property.notFound
-			count: 1
-			path: Modules/Auth/tests/Feature/ApiAuthTest.php
 
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
@@ -159,38 +129,8 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
-			count: 3
-			path: app/Http/Controllers/Admin/CategoryController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
 			count: 1
 			path: app/Http/Controllers/Admin/DashboardController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Artisan/AuctionController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$store\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/Artisan/AuctionController.php
-
-		-
-			message: '#^Parameter \#1 \$artisan of method App\\Services\\AuctionService\:\:createAuction\(\) expects Modules\\Auth\\Models\\Artisan, Illuminate\\Database\\Eloquent\\Model given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Artisan/AuctionController.php
-
-		-
-			message: '#^Parameter \#1 \$artisan of method App\\Services\\AuctionService\:\:getArtisanIndexData\(\) expects Modules\\Auth\\Models\\Artisan, Illuminate\\Database\\Eloquent\\Model given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Artisan/AuctionController.php
 
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
@@ -199,70 +139,16 @@ parameters:
 			path: app/Http/Controllers/Artisan/AuctionController.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Artisan/BidController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Artisan/BidController.php
-
-		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 3
 			path: app/Http/Controllers/Artisan/BidController.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Artisan/DashboardController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Artisan/DashboardController.php
-
-		-
-			message: '#^Parameter \#1 \$artisan of method App\\Services\\ArtisanDashboardService\:\:getDashboardData\(\) expects Modules\\Auth\\Models\\Artisan, Illuminate\\Database\\Eloquent\\Model given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Artisan/DashboardController.php
-
-		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 3
 			path: app/Http/Controllers/Artisan/DashboardController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/Artisan/OrderController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Artisan/OrderController.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:orders\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Http/Controllers/Artisan/OrderController.php
-
-		-
-			message: '#^Parameter \#1 \$artisan of method App\\Services\\OrderStatsService\:\:forArtisan\(\) expects Modules\\Auth\\Models\\Artisan, Illuminate\\Database\\Eloquent\\Model given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Artisan/OrderController.php
 
 		-
 			message: '#^Parameter \#1 \$currentStatus of method App\\Http\\Controllers\\Artisan\\OrderController\:\:canTransitionTo\(\) expects App\\Enums\\OrderStatus, string given\.$#'
@@ -275,42 +161,6 @@ parameters:
 			identifier: argument.type
 			count: 4
 			path: app/Http/Controllers/Artisan/OrderController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$store\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/Artisan/ProductController.php
-
-		-
-			message: '#^Parameter \#1 \$artisan of method App\\Services\\ProductService\:\:createProduct\(\) expects Modules\\Auth\\Models\\Artisan, Illuminate\\Database\\Eloquent\\Model\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Artisan/ProductController.php
-
-		-
-			message: '#^Parameter \#1 \$artisan of method App\\Services\\ProductService\:\:getArtisanIndexData\(\) expects Modules\\Auth\\Models\\Artisan, Illuminate\\Database\\Eloquent\\Model\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Http/Controllers/Artisan/ProductController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 3
-			path: app/Http/Controllers/Artisan/ProductController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/Artisan/StoreController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$store\.$#'
-			identifier: property.notFound
-			count: 3
-			path: app/Http/Controllers/Artisan/StoreController.php
 
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
@@ -387,18 +237,6 @@ parameters:
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
-			count: 2
-			path: app/Http/Controllers/Buyer/CategoryController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Product\:\:\$quantity\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/Buyer/OrderController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
 			count: 4
 			path: app/Http/Controllers/Buyer/OrderController.php
 
@@ -418,12 +256,6 @@ parameters:
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
 			identifier: argument.type
 			count: 2
-			path: app/Http/Controllers/Buyer/ProductController.php
-
-		-
-			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'
-			identifier: argument.type
-			count: 2
 			path: app/Http/Controllers/Buyer/StoreController.php
 
 		-
@@ -437,24 +269,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: app/Http/Controllers/ProfileController.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Middleware/EnsureArtisanIsActive.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Requests/UpdateArtisanRequest.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Requests/UpdateStoreRequest.php
 
 		-
 			message: '#^Access to an undefined property App\\Http\\Resources\\AuctionResource\:\:\$artisan\.$#'
@@ -595,108 +409,6 @@ parameters:
 			path: app/Http/Resources/OrderResource.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$artisan\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$average_rating\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$category\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$created_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$description\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$is_published\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$price\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$slug\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$stock\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ProductResource\:\:\$store\.$#'
-			identifier: property.notFound
-			count: 3
-			path: app/Http/Resources/ProductResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ReviewResource\:\:\$comment\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ReviewResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ReviewResource\:\:\$created_at\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ReviewResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ReviewResource\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ReviewResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ReviewResource\:\:\$rating\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/ReviewResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\ReviewResource\:\:\$user\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Resources/ReviewResource.php
-
-		-
 			message: '#^Cannot call method isFuture\(\) on string\.$#'
 			identifier: method.nonObject
 			count: 1
@@ -739,54 +451,6 @@ parameters:
 			path: app/Models/Cart.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Policies/ArtisanPolicy.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 3
-			path: app/Policies/AuctionPolicy.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$store\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Policies/AuctionPolicy.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$artisan_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Policies/ProductPolicy.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Policies/ProductPolicy.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$store\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Policies/ProductPolicy.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Policies/StorePolicy.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/AuctionService.php
-
-		-
 			message: '#^Cannot call method isPast\(\) on string\.$#'
 			identifier: method.nonObject
 			count: 1
@@ -811,12 +475,6 @@ parameters:
 			path: app/Services/AuctionService.php
 
 		-
-			message: '#^Access to an undefined property App\\Models\\Product\:\:\$quantity\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/CartService.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
 			identifier: property.notFound
 			count: 1
@@ -831,7 +489,7 @@ parameters:
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$quantity\.$#'
 			identifier: property.notFound
-			count: 3
+			count: 4
 			path: app/Services/CartService.php
 
 		-
@@ -847,27 +505,9 @@ parameters:
 			path: app/Services/CartService.php
 
 		-
-			message: '#^Result of \|\| is always true\.$#'
-			identifier: booleanOr.alwaysTrue
-			count: 2
-			path: app/Services/CartService.php
-
-		-
-			message: '#^Strict comparison using \!\=\= between ''active''\|''inactive''\|''pending''\|''suspended'' and App\\Enums\\ProductStatus\:\:Active will always evaluate to true\.$#'
-			identifier: notIdentical.alwaysTrue
-			count: 2
-			path: app/Services/CartService.php
-
-		-
-			message: '#^Unreachable statement \- code above always terminates\.$#'
-			identifier: deadCode.unreachable
-			count: 2
-			path: app/Services/CartService.php
-
-		-
 			message: '#^Using nullsafe property access "\?\-\>quantity" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
-			count: 1
+			count: 2
 			path: app/Services/CartService.php
 
 		-
@@ -877,64 +517,10 @@ parameters:
 			path: app/Services/OrderCheckoutService.php
 
 		-
-			message: '#^Result of \|\| is always true\.$#'
-			identifier: booleanOr.alwaysTrue
-			count: 1
-			path: app/Services/OrderCheckoutService.php
-
-		-
-			message: '#^Strict comparison using \!\=\= between ''active''\|''inactive''\|''pending''\|''suspended'' and App\\Enums\\ProductStatus\:\:Active will always evaluate to true\.$#'
-			identifier: notIdentical.alwaysTrue
-			count: 1
-			path: app/Services/OrderCheckoutService.php
-
-		-
-			message: '#^Unreachable statement \- code above always terminates\.$#'
-			identifier: deadCode.unreachable
-			count: 1
-			path: app/Services/OrderCheckoutService.php
-
-		-
 			message: '#^Strict comparison using \!\=\= between string and App\\Enums\\OrderStatus\:\:Pending will always evaluate to true\.$#'
 			identifier: notIdentical.alwaysTrue
 			count: 1
 			path: app/Services/OrderPaymentService.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 3
-			path: app/Services/ProductDetailService.php
-
-		-
-			message: '#^Call to function abort_unless\(\) with false and 404 will always evaluate to false\.$#'
-			identifier: function.impossibleType
-			count: 1
-			path: app/Services/ProductDetailService.php
-
-		-
-			message: '#^Result of && is always false\.$#'
-			identifier: booleanAnd.alwaysFalse
-			count: 1
-			path: app/Services/ProductDetailService.php
-
-		-
-			message: '#^Strict comparison using \=\=\= between ''active''\|''inactive''\|''pending''\|''suspended'' and App\\Enums\\ProductStatus\:\:Active will always evaluate to false\.$#'
-			identifier: identical.alwaysFalse
-			count: 1
-			path: app/Services/ProductDetailService.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/ProductService.php
-
-		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:sum\(\) expects \(callable\(Illuminate\\Database\\Eloquent\\Model\)\: int\)\|string\|null, Closure\(App\\Models\\Product\)\: int given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Services/ProductService.php
 
 		-
 			message: '#^Parameter \#1 \$view of function view expects view\-string\|null, string given\.$#'

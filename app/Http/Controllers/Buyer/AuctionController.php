@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Buyer;
 use App\Enums\AuctionStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Auction;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Modules\Product\Models\Category;
 
 class AuctionController extends Controller
 {

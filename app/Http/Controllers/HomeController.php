@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AuctionStatus;
-use App\Enums\ProductStatus;
 use App\Models\Auction;
-use App\Models\Category;
-use App\Models\Product;
 use Illuminate\Contracts\View\View;
+use Modules\Product\Enums\ProductStatus;
+use Modules\Product\Models\Category;
+use Modules\Product\Models\Product;
 
 class HomeController extends Controller
 {
