@@ -23,3 +23,5 @@ yarn-error.log
 /.zed
 _ide_helper_models.php
 phpstan-report.json
+GEMINI.md
+/frontend-assets
