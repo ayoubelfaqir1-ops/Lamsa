@@ -3,9 +3,7 @@
 namespace Modules\Auth\Models;
 
 use App\Models\Bid;
-use App\Models\Cart;
 use App\Models\Favorite;
-use App\Models\Order;
 use App\Models\Store;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +15,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Auth\Database\Factories\UserFactory;
 use Modules\Auth\Notifications\VerifyEmailNotification;
+use Modules\Order\Models\Cart;
+use Modules\Order\Models\Order;
 use Modules\Product\Models\Review;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -28,6 +28,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $address
  * @property Artisan|null $artisan
  * @property Store|null $store
+ * @property-read Cart|null $cart
  */
 class User extends Authenticatable implements MustVerifyEmail
 {

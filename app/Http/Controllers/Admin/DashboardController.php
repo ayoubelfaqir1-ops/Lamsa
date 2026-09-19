@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ArtisanStatus;
-use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
-use App\Models\Order;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use Modules\Auth\Models\Artisan;
+use Modules\Order\Enums\OrderStatus;
+use Modules\Order\Models\Order;
 use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Product;
 

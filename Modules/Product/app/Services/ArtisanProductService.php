@@ -2,10 +2,10 @@
 
 namespace Modules\Product\Services;
 
-use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Modules\Auth\Models\Artisan;
+use Modules\Order\Enums\OrderStatus;
 use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Http\Requests\StoreProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;

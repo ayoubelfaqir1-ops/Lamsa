@@ -2,8 +2,8 @@
 
 namespace Modules\Product\Policies;
 
-use App\Enums\OrderStatus;
 use Modules\Auth\Models\User;
+use Modules\Order\Enums\OrderStatus;
 use Modules\Product\Models\Review;
 
 class ReviewPolicy

@@ -36,7 +36,8 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Modules\\Auth\\": "Modules\\Auth\\app/",
-            "Modules\\Product\\": "Modules\\Product\\app/"
+            "Modules\\Product\\": "Modules\\Product\\app/",
+            "Modules\\Order\\": "Modules/Order/app/"
         }
     },
     "autoload-dev": {
@@ -45,7 +46,9 @@
             "Modules\\Auth\\Database\\Factories\\": "Modules/Auth/database/factories/",
             "Modules\\Auth\\Tests\\": "Modules/Auth/tests/",
             "Modules\\Product\\Tests\\": "Modules/Product/tests/",
-            "Modules\\Product\\Database\\Factories\\": "Modules/Product/database/factories/"
+            "Modules\\Product\\Database\\Factories\\": "Modules/Product/database/factories/",
+            "Modules\\Order\\Tests\\": "Modules/Order/tests/",
+            "Modules\\Order\\Database\\Factories\\": "Modules/Order/database/factories/"
         }
     },
     "scripts": {
