@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace Modules\Order\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,10 +11,13 @@ class UpdateCartItemRequest extends FormRequest
         return true;
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public function rules(): array
     {
         return [
-            'quantity' => ['required', 'integer', 'min:1'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:100'],
         ];
     }
 }

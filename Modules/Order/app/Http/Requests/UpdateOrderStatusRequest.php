@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Http\Requests;
+namespace Modules\Order\Http\Requests;
 
-use App\Enums\OrderStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Modules\Order\Enums\OrderStatus;
 
 class UpdateOrderStatusRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('update', $this->route('order'));
+        return true;
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public function rules(): array
     {
         return [
