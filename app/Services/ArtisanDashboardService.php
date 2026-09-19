@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\Enums\AuctionStatus;
-use App\Enums\OrderStatus;
 use App\Models\Bid;
-use App\Models\OrderItem;
 use Modules\Auth\Models\Artisan;
+use Modules\Order\Enums\OrderStatus;
+use Modules\Order\Models\OrderItem;
 use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Review;
 

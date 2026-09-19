@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Modules\Order\Models\Order;
 
 class ProfileController extends Controller
 {
