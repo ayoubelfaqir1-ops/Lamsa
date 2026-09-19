@@ -1,16 +1,32 @@
 <?php
 
-namespace App\Models;
+namespace Modules\Order\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Modules\Auth\Models\User;
+use Modules\Order\Database\Factories\CartFactory;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User|null $user
+ * @property-read Collection<int, CartItem> $items
+ */
 class Cart extends Model
 {
     use HasFactory;
+
+    protected static function newFactory()
+    {
+        return CartFactory::new();
+    }
 
     protected $fillable = ['user_id'];
 
@@ -22,10 +38,5 @@ class Cart extends Model
     public function items(): HasMany
     {
         return $this->hasMany(CartItem::class);
-    }
-
-    public function getTotalAttribute(): float
-    {
-        return $this->items->sum(fn ($item) => $item->quantity * $item->product->price);
     }
 }

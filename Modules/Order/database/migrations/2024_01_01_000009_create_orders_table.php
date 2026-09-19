@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index('user_id');
+            $table->index('artisan_id');
             $table->index('status');
         });
 
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->restrictOnDelete();
             $table->foreignId('artisan_id')->constrained()->restrictOnDelete();
+            $table->string('product_name');
             $table->unsignedInteger('quantity');
             $table->decimal('unit_price', 10, 2);
             $table->timestamps();

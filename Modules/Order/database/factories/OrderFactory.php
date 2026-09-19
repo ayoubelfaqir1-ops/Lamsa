@@ -1,14 +1,20 @@
 <?php
 
-namespace Database\Factories;
+namespace Modules\Order\Database\Factories;
 
-use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Auth\Models\Artisan;
 use Modules\Auth\Models\User;
+use Modules\Order\Enums\OrderStatus;
+use Modules\Order\Models\Order;
 
+/**
+ * @extends Factory<Order>
+ */
 class OrderFactory extends Factory
 {
+    protected $model = Order::class;
+
     public function definition(): array
     {
         $createdAt = fake()->dateTimeBetween('-4 months', 'now');
