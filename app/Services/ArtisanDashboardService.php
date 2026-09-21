@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Enums\AuctionStatus;
-use App\Models\Bid;
+use Modules\Auction\Enums\AuctionStatus;
+use Modules\Auction\Models\Bid;
 use Modules\Auth\Models\Artisan;
 use Modules\Order\Enums\OrderStatus;
 use Modules\Order\Models\OrderItem;

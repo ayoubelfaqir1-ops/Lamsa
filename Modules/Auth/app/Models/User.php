@@ -2,7 +2,6 @@
 
 namespace Modules\Auth\Models;
 
-use App\Models\Bid;
 use App\Models\Favorite;
 use App\Models\Store;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Auction\Models\Bid;
 use Modules\Auth\Database\Factories\UserFactory;
 use Modules\Auth\Notifications\VerifyEmailNotification;
 use Modules\Order\Models\Cart;

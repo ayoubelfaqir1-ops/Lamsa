@@ -1,13 +1,19 @@
 <?php
 
-namespace Database\Factories;
+namespace Modules\Auction\Database\Factories;
 
-use App\Models\Auction;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\Auction\Models\Auction;
+use Modules\Auction\Models\Bid;
 use Modules\Auth\Models\User;
 
+/**
+ * @extends Factory<Bid>
+ */
 class BidFactory extends Factory
 {
+    protected $model = Bid::class;
+
     public function definition(): array
     {
         return [
