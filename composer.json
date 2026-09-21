@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
+        "laravel/reverb": "^1.11",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.0",
         "laravel/tinker": "^2.9",
@@ -37,7 +38,8 @@
             "Database\\Seeders\\": "database/seeders/",
             "Modules\\Auth\\": "Modules\\Auth\\app/",
             "Modules\\Product\\": "Modules\\Product\\app/",
-            "Modules\\Order\\": "Modules/Order/app/"
+            "Modules\\Order\\": "Modules/Order/app/",
+            "Modules\\Auction\\": "Modules/Auction/app/"
         }
     },
     "autoload-dev": {
@@ -48,7 +50,9 @@
             "Modules\\Product\\Tests\\": "Modules/Product/tests/",
             "Modules\\Product\\Database\\Factories\\": "Modules/Product/database/factories/",
             "Modules\\Order\\Tests\\": "Modules/Order/tests/",
-            "Modules\\Order\\Database\\Factories\\": "Modules/Order/database/factories/"
+            "Modules\\Order\\Database\\Factories\\": "Modules/Order/database/factories/",
+            "Modules\\Auction\\Tests\\": "Modules/Auction/tests/",
+            "Modules\\Auction\\Database\\Factories\\": "Modules/Auction/database/factories/"
         }
     },
     "scripts": {

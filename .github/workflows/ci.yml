@@ -74,6 +74,13 @@ jobs:
       MAIL_MAILER: array
       QUEUE_CONNECTION: sync
       SESSION_DRIVER: array
+      BROADCAST_CONNECTION: reverb
+      REVERB_APP_ID: test-app-id
+      REVERB_APP_KEY: test-key
+      REVERB_APP_SECRET: test-secret
+      REVERB_HOST: localhost
+      REVERB_PORT: 8080
+      REVERB_SCHEME: http
 
     steps:
       - name: Checkout code
@@ -84,6 +91,9 @@ jobs:
         with:
           php-version: '8.2'
           extensions: mbstring, xml, pdo_sqlite
+
+      - name: Copy .env
+        run: cp .env.example .env
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress

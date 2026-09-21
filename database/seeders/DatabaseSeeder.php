@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Enums\ArtisanStatus;
-use App\Models\Auction;
 use App\Models\Store;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;

@@ -1,19 +1,25 @@
 <?php
 
-namespace Database\Factories;
+namespace Modules\Auction\Database\Factories;
 
-use App\Enums\AuctionStatus;
-use App\Models\Bid;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Modules\Auction\Enums\AuctionStatus;
+use Modules\Auction\Models\Auction;
+use Modules\Auction\Models\Bid;
 use Modules\Auth\Models\Artisan;
 use Modules\Auth\Models\User;
 use Modules\Product\Models\Category;
 
+/**
+ * @extends Factory<Auction>
+ */
 class AuctionFactory extends Factory
 {
+    protected $model = Auction::class;
+
     public function definition(): array
     {
         $startingPrice = fake()->randomFloat(2, 50, 300);
@@ -24,12 +30,14 @@ class AuctionFactory extends Factory
             'store_id' => Store::factory(['artisan_id' => $artisan]),
             'artisan_id' => $artisan,
             'category_id' => Category::factory(),
+            'winner_id' => null,
+            'winning_bid_id' => null,
             'name' => $name,
             'slug' => Str::slug($name).'-'.Str::random(4),
             'description' => fake()->paragraph(),
             'images' => [
-                fake()->imageUrl(1200, 900, 'craft', true),
-                fake()->imageUrl(1200, 900, 'craft', true),
+                'https://picsum.photos/seed/'.fake()->word().'/1200/900',
+                'https://picsum.photos/seed/'.fake()->word().'/1200/900',
             ],
             'starting_price' => $startingPrice,
             'current_price' => $startingPrice,
@@ -41,6 +49,24 @@ class AuctionFactory extends Factory
         ];
     }
 
+    public function scheduled(): static
+    {
+        return $this->state(fn () => [
+            'status' => AuctionStatus::Scheduled,
+            'starts_at' => now()->addDays(2),
+            'ends_at' => now()->addDays(7),
+        ]);
+    }
+
+    public function expired(): static
+    {
+        return $this->state(fn () => [
+            'status' => AuctionStatus::Active,
+            'starts_at' => now()->subDays(5),
+            'ends_at' => now()->subMinutes(10),
+        ]);
+    }
+
     public function endingSoon(): static
     {
         return $this->state(fn () => [
@@ -50,7 +76,7 @@ class AuctionFactory extends Factory
 
     public function withBids(int $count = 3, array|Collection|null $buyers = null): static
     {
-        return $this->afterCreating(function ($auction) use ($count, $buyers) {
+        return $this->afterCreating(function (Auction $auction) use ($count, $buyers) {
             $bidBuyers = collect($buyers);
             $currentAmount = (float) $auction->starting_price;
 

@@ -3,13 +3,13 @@
 namespace Modules\Auth\Models;
 
 use App\Enums\ArtisanStatus;
-use App\Models\Auction;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Modules\Auction\Models\Auction;
 use Modules\Auth\Database\Factories\ArtisanFactory;
 use Modules\Order\Models\Order;
 use Modules\Product\Models\Product;

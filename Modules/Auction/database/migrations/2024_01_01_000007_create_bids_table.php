@@ -17,6 +17,8 @@ return new class extends Migration
 
             $table->index('auction_id');
             $table->index('user_id');
+            $table->index(['auction_id', 'amount']);
+            $table->index('created_at');
         });
     }
 
