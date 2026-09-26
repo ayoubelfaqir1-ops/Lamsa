@@ -14,6 +14,8 @@ class AuctionClosed implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $afterCommit = true;
+
     public function __construct(
         public readonly Auction $auction,
     ) {}

@@ -208,6 +208,8 @@ class AuctionService
      */
     public function getPublicAuctions(array $filters = [], int $perPage = 12): LengthAwarePaginator
     {
+        $perPage = max(1, min(100, $perPage));
+
         return Auction::query()
             ->with(['store', 'category', 'highestBid.user'])
             ->withCount('bids')
@@ -252,6 +254,8 @@ class AuctionService
      */
     public function getArtisanAuctions(Artisan $artisan, int $perPage = 10): array
     {
+        $perPage = max(1, min(100, $perPage));
+
         $auctions = Auction::query()
             ->where('artisan_id', $artisan->id)
             ->with(['store', 'category', 'highestBid.user', 'winner'])
