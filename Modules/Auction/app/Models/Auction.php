@@ -4,6 +4,7 @@ namespace Modules\Auction\Models;
 
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,6 +43,35 @@ use Modules\Product\Models\Category;
  * @property-read User|null $winner
  * @property-read Bid|null $winningBid
  * @property-read Bid|null $highestBid
+ * @property-read Collection<int, Bid> $bids
+ * @property-read int|null $bids_count
+ *
+ * @method static Builder<static>|Auction active()
+ * @method static \Modules\Auction\Database\Factories\AuctionFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Auction live()
+ * @method static Builder<static>|Auction newModelQuery()
+ * @method static Builder<static>|Auction newQuery()
+ * @method static Builder<static>|Auction published()
+ * @method static Builder<static>|Auction query()
+ * @method static Builder<static>|Auction whereArtisanId($value)
+ * @method static Builder<static>|Auction whereCategoryId($value)
+ * @method static Builder<static>|Auction whereCreatedAt($value)
+ * @method static Builder<static>|Auction whereCurrentPrice($value)
+ * @method static Builder<static>|Auction whereDescription($value)
+ * @method static Builder<static>|Auction whereEndsAt($value)
+ * @method static Builder<static>|Auction whereId($value)
+ * @method static Builder<static>|Auction whereImages($value)
+ * @method static Builder<static>|Auction whereIsPublished($value)
+ * @method static Builder<static>|Auction whereName($value)
+ * @method static Builder<static>|Auction whereReservePrice($value)
+ * @method static Builder<static>|Auction whereSlug($value)
+ * @method static Builder<static>|Auction whereStartingPrice($value)
+ * @method static Builder<static>|Auction whereStartsAt($value)
+ * @method static Builder<static>|Auction whereStatus($value)
+ * @method static Builder<static>|Auction whereStoreId($value)
+ * @method static Builder<static>|Auction whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class Auction extends Model
 {

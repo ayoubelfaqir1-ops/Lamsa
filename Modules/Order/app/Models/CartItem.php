@@ -20,6 +20,19 @@ use Modules\Product\Models\Product;
  * @property-read Cart|null $cart
  * @property-read Product|null $product
  * @property-read float $subtotal
+ *
+ * @method static \Modules\Order\Database\Factories\CartItemFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartItem newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartItem newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartItem query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartItem whereCartId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartItem whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartItem whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CartItem whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class CartItem extends Model
 {

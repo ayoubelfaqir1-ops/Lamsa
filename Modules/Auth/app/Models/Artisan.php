@@ -4,11 +4,13 @@ namespace Modules\Auth\Models;
 
 use App\Enums\ArtisanStatus;
 use App\Models\Store;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use Modules\Auction\Models\Auction;
 use Modules\Auth\Database\Factories\ArtisanFactory;
 use Modules\Order\Models\Order;
@@ -24,6 +26,31 @@ use Modules\Product\Models\Product;
  * @property ArtisanStatus $status
  * @property-read User|null $user
  * @property-read Store|null $store
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, Auction> $auctions
+ * @property-read int|null $auctions_count
+ * @property-read Collection<int, Order> $orders
+ * @property-read int|null $orders_count
+ * @property-read Collection<int, Product> $products
+ * @property-read int|null $products_count
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan active()
+ * @method static \Modules\Auth\Database\Factories\ArtisanFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan whereBio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan whereCity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan whereCraftType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan whereRegion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan whereUserId($value)
+ *
+ * @mixin \Eloquent
  */
 class Artisan extends Model
 {

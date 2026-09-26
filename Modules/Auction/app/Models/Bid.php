@@ -18,6 +18,19 @@ use Modules\Auth\Models\User;
  * @property Carbon $updated_at
  * @property-read Auction $auction
  * @property-read User $user
+ *
+ * @method static \Modules\Auction\Database\Factories\BidFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Bid newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Bid newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Bid query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Bid whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Bid whereAuctionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Bid whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Bid whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Bid whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Bid whereUserId($value)
+ *
+ * @mixin \Eloquent
  */
 class Bid extends Model
 {
