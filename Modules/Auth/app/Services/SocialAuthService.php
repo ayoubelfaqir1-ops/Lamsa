@@ -2,7 +2,6 @@
 
 namespace Modules\Auth\Services;
 
-use Exception;
 use Laravel\Socialite\Facades\Socialite;
 use Modules\Auth\Events\UserRegistered;
 use Modules\Auth\Models\User;

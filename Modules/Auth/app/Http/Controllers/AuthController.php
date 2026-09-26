@@ -11,6 +11,7 @@ use Modules\Auth\Http\Requests\RegisterRequest;
 use Modules\Auth\Http\Requests\UpdatePasswordRequest;
 use Modules\Auth\Http\Requests\UpdateProfileRequest;
 use Modules\Auth\Http\Resources\UserResource;
+use Modules\Auth\Models\User;
 use Modules\Auth\Services\AuthService;
 use Modules\Auth\Services\ProfileService;
 use Modules\Auth\Services\SocialAuthService;
@@ -150,7 +151,7 @@ class AuthController extends Controller
      */
     public function verifyEmail(Request $request, int $id, string $hash): JsonResponse
     {
-        $user = \Modules\Auth\Models\User::findOrFail($id);
+        $user = User::findOrFail($id);
 
         $result = $this->authService->verifyEmail($user, $hash);
 
