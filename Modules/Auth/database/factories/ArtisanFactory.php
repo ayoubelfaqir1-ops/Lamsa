@@ -15,7 +15,7 @@ class ArtisanFactory extends Factory
     {
         return [
             'user_id' => User::factory()->artisan(),
-            'bio' => fake()->paragraph(),
+            'bio' => fake()->text(200),
             'city' => fake()->city(),
             'region' => fake()->state(),
             'status' => ArtisanStatus::Active,

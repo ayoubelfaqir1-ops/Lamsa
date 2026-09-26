@@ -3,9 +3,6 @@
 namespace Modules\Auth\Models;
 
 use App\Enums\ArtisanStatus;
-use App\Models\Auction;
-use App\Models\Order;
-use App\Models\Product;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +11,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Modules\Auction\Models\Auction;
 use Modules\Auth\Database\Factories\ArtisanFactory;
+use Modules\Order\Models\Order;
+use Modules\Product\Models\Product;
 
 /**
  * @property int $id
@@ -22,8 +22,10 @@ use Modules\Auth\Database\Factories\ArtisanFactory;
  * @property string|null $bio
  * @property string|null $city
  * @property string|null $region
- * @property ArtisanStatus $status
  * @property string|null $craft_type
+ * @property ArtisanStatus $status
+ * @property-read User|null $user
+ * @property-read Store|null $store
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Auction> $auctions
@@ -32,8 +34,6 @@ use Modules\Auth\Database\Factories\ArtisanFactory;
  * @property-read int|null $orders_count
  * @property-read Collection<int, Product> $products
  * @property-read int|null $products_count
- * @property-read Store|null $store
- * @property-read User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Artisan active()
  * @method static \Modules\Auth\Database\Factories\ArtisanFactory factory($count = null, $state = [])
@@ -78,6 +78,9 @@ class Artisan extends Model
         return $query->where('status', ArtisanStatus::Active);
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

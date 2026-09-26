@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Modules\Auction\Models\Auction;
 use Modules\Auth\Models\Artisan;
+use Modules\Product\Models\Product;
 
 /**
  * @property int $id
@@ -18,6 +20,7 @@ use Modules\Auth\Models\Artisan;
  * @property string|null $description
  * @property string|null $logo
  * @property bool $is_active
+ * @property float|null $rating
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Artisan $artisan

@@ -2,11 +2,7 @@
 
 namespace Modules\Auth\Models;
 
-use App\Models\Bid;
-use App\Models\Cart;
 use App\Models\Favorite;
-use App\Models\Order;
-use App\Models\Review;
 use App\Models\Store;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,8 +17,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
+use Modules\Auction\Models\Bid;
 use Modules\Auth\Database\Factories\UserFactory;
 use Modules\Auth\Notifications\VerifyEmailNotification;
+use Modules\Order\Models\Cart;
+use Modules\Order\Models\Order;
+use Modules\Product\Models\Review;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -33,6 +33,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $email
  * @property string|null $phone
  * @property string|null $address
+ * @property Artisan|null $artisan
+ * @property Store|null $store
+ * @property-read Cart|null $cart
  * @property string|null $provider_name
  * @property string|null $provider_id
  * @property string|null $avatar
@@ -41,10 +44,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Artisan|null $artisan
  * @property-read Collection<int, Bid> $bids
  * @property-read int|null $bids_count
- * @property-read Cart|null $cart
  * @property-read Collection<int, Favorite> $favorites
  * @property-read int|null $favorites_count
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
@@ -57,7 +58,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $reviews_count
  * @property-read Collection<int, Role> $roles
  * @property-read int|null $roles_count
- * @property-read Store|null $store
  * @property-read Collection<int, PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  *

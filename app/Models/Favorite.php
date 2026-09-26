@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Modules\Auth\Models\User;
+use Modules\Product\Models\Product;
 
 /**
  * @property int $id
