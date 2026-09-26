@@ -2,9 +2,9 @@
 
 namespace Modules\Auction\Tests\Unit;
 
+use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
-use Database\Seeders\RolePermissionSeeder;
 use Modules\Auction\Enums\AuctionStatus;
 use Modules\Auction\Events\AuctionClosed;
 use Modules\Auction\Models\Auction;
@@ -22,7 +22,7 @@ class AuctionServiceTest extends TestCase
     {
         parent::setUp();
         $this->seed(RolePermissionSeeder::class);
-        $this->service = new AuctionService();
+        $this->service = new AuctionService;
     }
 
     public function test_close_single_auction_sets_winner_when_reserve_met(): void
