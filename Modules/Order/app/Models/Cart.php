@@ -18,6 +18,18 @@ use Modules\Order\Database\Factories\CartFactory;
  * @property Carbon|null $updated_at
  * @property-read User|null $user
  * @property-read Collection<int, CartItem> $items
+ * @property-read int|null $items_count
+ *
+ * @method static \Modules\Order\Database\Factories\CartFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cart newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cart newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cart query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cart whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cart whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cart whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Cart whereUserId($value)
+ *
+ * @mixin \Eloquent
  */
 class Cart extends Model
 {
