@@ -44,7 +44,12 @@ class ProductPolicy
         /** @var Artisan|null $artisan */
         $artisan = $user->artisan;
 
-        return $user->hasRole('artisan') && $product->store && $artisan?->id === $product->store->artisan_id;
+        if (! $artisan || ! $user->hasRole('artisan')) {
+            return false;
+        }
+
+        return $product->artisan_id === $artisan->id
+            || ($product->store && $artisan->id === $product->store->artisan_id);
     }
 
     public function delete(User $user, Product $product): bool
@@ -56,6 +61,11 @@ class ProductPolicy
         /** @var Artisan|null $artisan */
         $artisan = $user->artisan;
 
-        return $user->hasRole('artisan') && $product->store && $artisan?->id === $product->store->artisan_id;
+        if (! $artisan || ! $user->hasRole('artisan')) {
+            return false;
+        }
+
+        return $product->artisan_id === $artisan->id
+            || ($product->store && $artisan->id === $product->store->artisan_id);
     }
 }
