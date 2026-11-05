@@ -3,7 +3,6 @@
 namespace Modules\Auth\Models;
 
 use App\Enums\ArtisanStatus;
-use App\Models\Store;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +14,7 @@ use Modules\Auction\Models\Auction;
 use Modules\Auth\Database\Factories\ArtisanFactory;
 use Modules\Order\Models\Order;
 use Modules\Product\Models\Product;
+use Modules\Store\Models\Store;
 
 /**
  * @property int $id

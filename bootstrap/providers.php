@@ -5,6 +5,7 @@ use Modules\Auction\Providers\AuctionModuleServiceProvider;
 use Modules\Auth\Providers\AuthModuleServiceProvider;
 use Modules\Order\Providers\OrderModuleServiceProvider;
 use Modules\Product\Providers\ProductModuleServiceProvider;
+use Modules\Store\Providers\StoreModuleServiceProvider;
 
 return [
     AppServiceProvider::class,
@@ -12,4 +13,5 @@ return [
     ProductModuleServiceProvider::class,
     OrderModuleServiceProvider::class,
     AuctionModuleServiceProvider::class,
+    StoreModuleServiceProvider::class,
 ];

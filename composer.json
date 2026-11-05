@@ -39,7 +39,8 @@
             "Modules\\Auth\\": "Modules\\Auth\\app/",
             "Modules\\Product\\": "Modules\\Product\\app/",
             "Modules\\Order\\": "Modules/Order/app/",
-            "Modules\\Auction\\": "Modules/Auction/app/"
+            "Modules\\Auction\\": "Modules/Auction/app/",
+            "Modules\\Store\\": "Modules/Store/app/"
         }
     },
     "autoload-dev": {
@@ -48,6 +49,8 @@
             "Modules\\Auth\\Database\\Factories\\": "Modules/Auth/database/factories/",
             "Modules\\Auth\\Tests\\": "Modules/Auth/tests/",
             "Modules\\Product\\Tests\\": "Modules/Product/tests/",
+            "Modules\\Store\\Database\\Factories\\": "Modules/Store/database/factories/",
+            "Modules\\Store\\Tests\\": "Modules/Store/tests/",
             "Modules\\Product\\Database\\Factories\\": "Modules/Product/database/factories/",
             "Modules\\Order\\Tests\\": "Modules/Order/tests/",
             "Modules\\Order\\Database\\Factories\\": "Modules/Order/database/factories/",
