@@ -14,4 +14,3 @@ Route::middleware(['auth:sanctum', 'role:artisan'])->prefix('artisan/store')->gr
     Route::match(['put', 'patch', 'post'], '/update', [ArtisanStoreApiController::class, 'update']);
     Route::delete('/logo', [ArtisanStoreApiController::class, 'destroyLogo']);
 });
-

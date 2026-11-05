@@ -73,4 +73,3 @@ class PublicStoreApiTest extends TestCase
         $response->assertStatus(404);
     }
 }
-

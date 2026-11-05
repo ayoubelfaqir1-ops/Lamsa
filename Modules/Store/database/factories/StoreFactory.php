@@ -38,4 +38,3 @@ class StoreFactory extends Factory
         ]);
     }
 }
-

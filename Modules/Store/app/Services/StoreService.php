@@ -116,4 +116,3 @@ class StoreService
         return $slug;
     }
 }
-

@@ -202,4 +202,3 @@ class ArtisanStoreApiTest extends TestCase
             ->assertJsonPath('data.slug', 'unique-store-1');
     }
 }
-

@@ -24,4 +24,3 @@ class StoreModuleServiceProvider extends ServiceProvider
             ->group(__DIR__.'/../../routes/api.php');
     }
 }
-

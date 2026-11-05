@@ -9,6 +9,4 @@ use Modules\Store\Models\Store as ModularStore;
  *
  * @deprecated Use Modules\Store\Models\Store instead.
  */
-class Store extends ModularStore
-{
-}
+class Store extends ModularStore {}

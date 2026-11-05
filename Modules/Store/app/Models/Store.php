@@ -108,4 +108,3 @@ class Store extends Model
         return StoreFactory::new();
     }
 }
-

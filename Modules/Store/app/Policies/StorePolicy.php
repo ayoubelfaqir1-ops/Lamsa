@@ -60,4 +60,3 @@ class StorePolicy
         return $user->isArtisan() && ($user->artisan?->id === $store->artisan_id);
     }
 }
-

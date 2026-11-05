@@ -35,4 +35,3 @@ class PublicStoreApiController extends Controller
         ]);
     }
 }
-
