@@ -22,6 +22,11 @@ class AuthModuleServiceProvider extends ServiceProvider
         Route::middleware('api')
             ->prefix('api/v1/auth')
             ->group(__DIR__.'/../../routes/api.php');
+
+        Route::middleware('api')
+            ->prefix('api/v1/admin')
+            ->group(__DIR__.'/../../routes/admin.php');
+
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'auth');
 
