@@ -33,7 +33,7 @@ class StoreResource extends JsonResource
                 'craft_type' => $this->artisan?->craft_type,
                 'city' => $this->artisan?->city,
                 'region' => $this->artisan?->region,
-                'status' => $this->artisan?->status?->value ?? $this->artisan?->status,
+                'status' => $this->artisan?->status->value,
             ]),
             'products_count' => $this->when(isset($this->products_count), $this->products_count),
         ];
