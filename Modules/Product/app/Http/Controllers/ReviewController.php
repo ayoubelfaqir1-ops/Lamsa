@@ -78,3 +78,4 @@ class ReviewController extends Controller
             : Product::where('slug', $idOrSlug)->firstOrFail();
     }
 }
+
