@@ -31,6 +31,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('artisan/orders')->group(function () {
         Route::get('/', [ArtisanOrderApiController::class, 'index']);
         Route::get('/{order}', [ArtisanOrderApiController::class, 'show']);
+        Route::patch('/{order}', [ArtisanOrderApiController::class, 'updateStatus']);
         Route::patch('/{order}/status', [ArtisanOrderApiController::class, 'updateStatus']);
     });
 });
