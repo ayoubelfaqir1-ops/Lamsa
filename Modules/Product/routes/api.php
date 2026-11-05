@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Product\Http\Controllers\AdminProductController;
 use Modules\Product\Http\Controllers\ArtisanProductController;
 use Modules\Product\Http\Controllers\CategoryController;
+use Modules\Product\Http\Controllers\FavoriteController;
 use Modules\Product\Http\Controllers\ProductCatalogController;
 use Modules\Product\Http\Controllers\ReviewController;
 
@@ -16,6 +17,11 @@ Route::middleware('throttle:catalog')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/products/{id}/reviews', [ReviewController::class, 'store']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::match(['post', 'delete'], '/products/{id}/favorite', [FavoriteController::class, 'toggle']);
+    Route::get('/favorites', [FavoriteController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'role:artisan'])->prefix('artisan')->group(function () {
