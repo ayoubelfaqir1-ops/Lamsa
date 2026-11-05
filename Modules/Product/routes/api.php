@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Product\Http\Controllers\AdminProductController;
 use Modules\Product\Http\Controllers\ArtisanProductController;
 use Modules\Product\Http\Controllers\CategoryController;
 use Modules\Product\Http\Controllers\ProductCatalogController;
@@ -20,4 +21,12 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'role:artisan'])->prefix('artisan')->group(function () {
     Route::apiResource('products', ArtisanProductController::class);
     Route::patch('products/{product}/toggle-publish', [ArtisanProductController::class, 'togglePublish']);
+});
+
+Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/products', [AdminProductController::class, 'index']);
+    Route::get('/products/{id}', [AdminProductController::class, 'show']);
+    Route::patch('/products/{product}', [AdminProductController::class, 'update']);
+    Route::delete('/products/{product}', [AdminProductController::class, 'destroy']);
+    Route::post('/products/{id}/restore', [AdminProductController::class, 'restore']);
 });
