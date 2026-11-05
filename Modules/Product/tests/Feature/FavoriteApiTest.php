@@ -216,4 +216,3 @@ class FavoriteApiTest extends TestCase
         $response->assertUnauthorized();
     }
 }
-
