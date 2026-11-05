@@ -244,4 +244,3 @@ class AdminProductModerationTest extends TestCase
             ->assertJsonValidationErrors(['status']);
     }
 }
-
