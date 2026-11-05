@@ -197,3 +197,4 @@ class AdminArtisanApprovalTest extends TestCase
             ->assertJsonValidationErrors(['status']);
     }
 }
+

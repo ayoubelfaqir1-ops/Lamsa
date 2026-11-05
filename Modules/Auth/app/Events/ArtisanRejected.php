@@ -15,3 +15,4 @@ class ArtisanRejected
         public ?string $reason = null
     ) {}
 }
+

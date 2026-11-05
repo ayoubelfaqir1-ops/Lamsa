@@ -82,3 +82,4 @@ class AdminArtisanApiController extends Controller
         ]);
     }
 }
+
