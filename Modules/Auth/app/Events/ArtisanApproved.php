@@ -12,4 +12,3 @@ class ArtisanApproved
 
     public function __construct(public Artisan $artisan) {}
 }
-

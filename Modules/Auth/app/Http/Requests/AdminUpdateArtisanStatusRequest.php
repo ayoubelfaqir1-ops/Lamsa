@@ -22,4 +22,3 @@ class AdminUpdateArtisanStatusRequest extends FormRequest
         ];
     }
 }
-

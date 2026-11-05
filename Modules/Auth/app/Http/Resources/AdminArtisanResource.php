@@ -37,4 +37,3 @@ class AdminArtisanResource extends JsonResource
         ];
     }
 }
-
