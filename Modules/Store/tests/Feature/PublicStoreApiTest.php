@@ -42,6 +42,7 @@ class PublicStoreApiTest extends TestCase
         ]);
 
         Product::factory()->create([
+            'store_id' => $store->id,
             'artisan_id' => $artisan->id,
             'status' => ProductStatus::Active,
         ]);

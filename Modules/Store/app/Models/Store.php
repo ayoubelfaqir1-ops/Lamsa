@@ -22,6 +22,7 @@ use Modules\Store\Database\Factories\StoreFactory;
  * @property string|null $description
  * @property string|null $logo
  * @property bool $is_active
+ * @property float|null $rating
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Artisan|null $artisan
