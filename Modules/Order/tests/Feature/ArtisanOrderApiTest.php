@@ -119,4 +119,91 @@ class ArtisanOrderApiTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonFragment(['message' => 'Cannot transition order from pending to delivered.']);
     }
+
+    public function test_unauthenticated_user_cannot_access_artisan_orders(): void
+    {
+        $response = $this->getJson('/api/v1/artisan/orders');
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_artisan_can_update_status_via_direct_order_patch(): void
+    {
+        Sanctum::actingAs($this->artisanUser);
+
+        $order = Order::factory()->create([
+            'artisan_id' => $this->artisan->id,
+            'status' => OrderStatus::Pending,
+        ]);
+
+        $response = $this->patchJson("/api/v1/artisan/orders/{$order->id}", [
+            'status' => OrderStatus::Processing->value,
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('data.status', OrderStatus::Processing->value);
+
+        $this->assertEquals(OrderStatus::Processing, $order->fresh()->status);
+    }
+
+    public function test_artisan_cannot_update_another_artisans_order(): void
+    {
+        Sanctum::actingAs($this->artisanUser);
+
+        $otherArtisan = Artisan::factory()->create(['status' => 'active']);
+        $order = Order::factory()->create([
+            'artisan_id' => $otherArtisan->id,
+            'status' => OrderStatus::Pending,
+        ]);
+
+        $response = $this->patchJson("/api/v1/artisan/orders/{$order->id}", [
+            'status' => OrderStatus::Processing->value,
+        ]);
+
+        $response->assertForbidden();
+    }
+
+    public function test_artisan_can_complete_full_fulfillment_lifecycle(): void
+    {
+        Sanctum::actingAs($this->artisanUser);
+
+        $order = Order::factory()->create([
+            'artisan_id' => $this->artisan->id,
+            'status' => OrderStatus::Pending,
+        ]);
+
+        // 1. Pending -> Processing
+        $this->patchJson("/api/v1/artisan/orders/{$order->id}", ['status' => OrderStatus::Processing->value])
+            ->assertOk()
+            ->assertJsonPath('data.status', OrderStatus::Processing->value);
+
+        // 2. Processing -> Shipped
+        $this->patchJson("/api/v1/artisan/orders/{$order->id}", ['status' => OrderStatus::Shipped->value])
+            ->assertOk()
+            ->assertJsonPath('data.status', OrderStatus::Shipped->value);
+
+        // 3. Shipped -> Delivered
+        $this->patchJson("/api/v1/artisan/orders/{$order->id}", ['status' => OrderStatus::Delivered->value])
+            ->assertOk()
+            ->assertJsonPath('data.status', OrderStatus::Delivered->value);
+
+        $this->assertEquals(OrderStatus::Delivered, $order->fresh()->status);
+    }
+
+    public function test_invalid_status_value_is_rejected_by_validation(): void
+    {
+        Sanctum::actingAs($this->artisanUser);
+
+        $order = Order::factory()->create([
+            'artisan_id' => $this->artisan->id,
+            'status' => OrderStatus::Pending,
+        ]);
+
+        $response = $this->patchJson("/api/v1/artisan/orders/{$order->id}", [
+            'status' => 'invalid_status_value',
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['status']);
+    }
 }
