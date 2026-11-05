@@ -3,7 +3,7 @@
 namespace Modules\Product\Policies;
 
 use Modules\Auth\Models\User;
-use Modules\Order\Enums\OrderStatus;
+use Modules\Product\Models\Product;
 use Modules\Product\Models\Review;
 
 class ReviewPolicy
@@ -13,17 +13,20 @@ class ReviewPolicy
         return true;
     }
 
-    public function create(User $user, int $productId): bool
+    public function view(?User $user, Review $review): bool
+    {
+        return true;
+    }
+
+    public function create(User $user, Product|int $product): bool
     {
         if ($user->isAdmin()) {
             return true;
         }
 
-        // Buyer can only review purchased products
-        return $user->orders()
-            ->whereIn('status', [OrderStatus::Delivered->value])
-            ->whereHas('items', fn ($q) => $q->where('product_id', $productId))
-            ->exists();
+        $productId = $product instanceof Product ? $product->id : $product;
+
+        return ! Review::where('user_id', $user->id)->where('product_id', $productId)->exists();
     }
 
     public function update(User $user, Review $review): bool
