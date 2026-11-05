@@ -206,4 +206,3 @@ class ProductReviewApiTest extends TestCase
             ->assertJsonPath('data.0.comment', 'Beautiful artisan design.');
     }
 }
-

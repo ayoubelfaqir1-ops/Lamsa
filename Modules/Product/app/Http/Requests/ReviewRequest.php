@@ -22,4 +22,3 @@ class ReviewRequest extends FormRequest
         ];
     }
 }
-
