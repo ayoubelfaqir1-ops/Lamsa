@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Product\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use Modules\Product\Http\Controllers\AdminProductController;
 use Modules\Product\Http\Controllers\ArtisanProductController;
 use Modules\Product\Http\Controllers\CategoryController;
@@ -30,6 +31,7 @@ Route::middleware(['auth:sanctum', 'role:artisan'])->prefix('artisan')->group(fu
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
+    Route::apiResource('categories', AdminCategoryController::class);
     Route::get('/products', [AdminProductController::class, 'index']);
     Route::get('/products/{id}', [AdminProductController::class, 'show']);
     Route::patch('/products/{product}', [AdminProductController::class, 'update']);
