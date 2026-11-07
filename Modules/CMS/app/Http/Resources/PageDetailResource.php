@@ -21,4 +21,3 @@ class PageDetailResource extends JsonResource
         ];
     }
 }
-

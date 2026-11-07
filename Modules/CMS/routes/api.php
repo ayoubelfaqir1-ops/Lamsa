@@ -22,5 +22,3 @@ Route::prefix('pages')->group(function () {
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
     Route::apiResource('pages', AdminPageController::class);
 });
-
-

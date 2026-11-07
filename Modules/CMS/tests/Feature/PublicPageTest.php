@@ -108,4 +108,3 @@ class PublicPageTest extends TestCase
         $response->assertNotFound();
     }
 }
-
