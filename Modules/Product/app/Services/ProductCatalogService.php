@@ -5,6 +5,7 @@ namespace Modules\Product\Services;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 use Modules\Product\Enums\ProductStatus;
 use Modules\Product\Models\Category;
 use Modules\Product\Models\Product;
@@ -64,13 +65,15 @@ class ProductCatalogService
      */
     public function getActiveCategories(): Collection
     {
-        return Category::query()
-            ->where('is_active', true)
-            ->withCount([
-                'products' => fn ($query) => $query->where('is_published', true)->where('status', ProductStatus::Active),
-            ])
-            ->orderBy('name')
-            ->get();
+        return Cache::remember('active_categories_list', 86400, function () {
+            return Category::query()
+                ->where('is_active', true)
+                ->withCount([
+                    'products' => fn ($query) => $query->where('is_published', true)->where('status', ProductStatus::Active),
+                ])
+                ->orderBy('name')
+                ->get();
+        });
     }
 
     /**

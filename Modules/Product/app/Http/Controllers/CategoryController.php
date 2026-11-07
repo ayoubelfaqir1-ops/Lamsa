@@ -3,7 +3,7 @@
 namespace Modules\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\JsonResponse;
 use Modules\Product\Http\Resources\CategoryResource;
 use Modules\Product\Services\ProductCatalogService;
 
@@ -13,10 +13,12 @@ class CategoryController extends Controller
         private readonly ProductCatalogService $catalogService
     ) {}
 
-    public function index(): AnonymousResourceCollection
+    public function index(): JsonResponse
     {
         $categories = $this->catalogService->getActiveCategories();
 
-        return CategoryResource::collection($categories);
+        return CategoryResource::collection($categories)
+            ->response()
+            ->header('Cache-Control', 'public, max-age=3600, stale-while-revalidate=60');
     }
 }

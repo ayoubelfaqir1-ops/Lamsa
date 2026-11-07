@@ -11,6 +11,8 @@ use Illuminate\Support\ServiceProvider;
 use Modules\Product\Models\Category;
 use Modules\Product\Models\Product;
 use Modules\Product\Models\Review;
+use Modules\Product\Observers\CategoryObserver;
+use Modules\Product\Observers\ProductObserver;
 use Modules\Product\Policies\CategoryPolicy;
 use Modules\Product\Policies\ProductPolicy;
 use Modules\Product\Policies\ReviewPolicy;
@@ -22,6 +24,9 @@ class ProductModuleServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureRateLimiting();
+
+        Category::observe(CategoryObserver::class);
+        Product::observe(ProductObserver::class);
 
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Product::class, ProductPolicy::class);
