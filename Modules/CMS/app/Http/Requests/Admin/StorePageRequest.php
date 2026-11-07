@@ -21,3 +21,4 @@ class StorePageRequest extends FormRequest
         ];
     }
 }
+

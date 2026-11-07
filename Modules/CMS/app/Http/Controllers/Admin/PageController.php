@@ -97,3 +97,4 @@ class PageController extends Controller
         return $slug;
     }
 }
+

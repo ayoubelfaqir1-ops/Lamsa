@@ -32,3 +32,4 @@ class UpdatePageRequest extends FormRequest
         ];
     }
 }
+

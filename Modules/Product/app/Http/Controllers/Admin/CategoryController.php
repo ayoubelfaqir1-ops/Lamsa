@@ -100,3 +100,4 @@ class CategoryController extends Controller
         return $slug;
     }
 }
+

@@ -217,3 +217,4 @@ class AdminCategoryCrudTest extends TestCase
         $this->getJson('/api/v1/admin/categories')->assertUnauthorized();
     }
 }
+
