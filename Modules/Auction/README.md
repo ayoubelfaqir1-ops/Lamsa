@@ -1,221 +1,259 @@
-# Auction Module (`Modules/Auction`)
+# Auction Module
 
-The **Auction Module** manages time-window competitive bidding, artisan auction setup, real-time WebSocket event broadcasting (via Laravel Reverb), high-concurrency pessimistic locking, and automated cron sweepers for unique handcrafted artisan items on the Lamsa platform.
+> Real-time competitive bidding engine, time-window auction lifecycle management, and WebSocket broadcasting via Laravel Reverb. Status: `stable`
 
 ---
 
-## 1. Domain-Driven Architecture
+## 1. Overview
 
+The **Auction Module** manages competitive bidding rooms for unique, handcrafted artisan items. It provides scheduled start/end windows, pessimistic database row-locking for bid concurrency, real-time WebSocket push updates, and automated background closing sweepers.
+
+- **Who Uses It:**
+  - **Guests / Public:** Browse active, scheduled, and past auctions with public bid history (reserve prices strictly hidden).
+  - **Buyers:** Place bids on active auctions, monitor outbid events via WebSockets, view bid history.
+  - **Artisans:** Create auctions (`starting_price`, confidential `reserve_price`, time window), monitor live bidding, cancel scheduled auctions.
+- **What It Does NOT Do:**
+  - It does **not** process final payment checkout (handled by [`Modules/Order`](../Order/README.md) once an auction ends with a winner).
+  - It does **not** manage general fixed-price catalog listings (handled by [`Modules/Product`](../Product/README.md)).
+
+---
+
+## 2. Quick Start
+
+### Required Environment Variables (`.env`)
+```dotenv
+BROADCAST_CONNECTION=reverb
+REVERB_APP_ID=your-reverb-app-id
+REVERB_APP_KEY=your-reverb-app-key
+REVERB_APP_SECRET=your-reverb-app-secret
+REVERB_HOST="ws.lamsa.ma"
+REVERB_PORT=443
+REVERB_SCHEME=https
+```
+
+### Migrations
+- `create_auctions_table`
+- `create_bids_table`
+
+### Running Module Tests
+```bash
+php artisan test Modules/Auction/tests/Feature
+```
+
+---
+
+## 3. Architecture
+
+### Key File Structure
 ```
 Modules/Auction/
 ├── app/
-│   ├── Console/
-│   │   └── Commands/
-│   │       └── CloseExpiredAuctionsCommand.php  # Scheduled sweeper: auctions:close-expired
+│   ├── Console/Commands/
+│   │   └── CloseExpiredAuctionsCommand.php  # Scheduled sweeper: auctions:close-expired
 │   ├── Enums/
-│   │   └── AuctionStatus.php                    # scheduled, active, ended, cancelled
+│   │   └── AuctionStatus.php                # scheduled, active, ended, cancelled
 │   ├── Events/
-│   │   ├── BidPlaced.php                        # Broadcasts new bids to private-auction.{id}
-│   │   └── AuctionClosed.php                    # Broadcasts winner outcome to private-auction.{id}
+│   │   ├── BidPlaced.php                    # Broadcasts new bids to private-auction.{id}
+│   │   └── AuctionClosed.php                # Broadcasts winner outcome to private-auction.{id}
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   ├── PublicAuctionApiController.php   # Catalog browsing & auction details
-│   │   │   ├── BuyerBidApiController.php        # Placing & viewing bids
-│   │   │   └── ArtisanAuctionApiController.php  # Artisan auction setup, metrics, cancellation
-│   │   ├── Requests/
-│   │   │   ├── StoreAuctionRequest.php
-│   │   │   ├── UpdateAuctionRequest.php
-│   │   │   └── PlaceBidRequest.php
+│   │   │   ├── PublicAuctionApiController.php
+│   │   │   ├── BuyerBidApiController.php
+│   │   │   └── ArtisanAuctionApiController.php
+│   │   ├── Requests/                        # StoreAuctionRequest, PlaceBidRequest, etc.
 │   │   └── Resources/
-│   │       ├── AuctionResource.php              # Exposes public data; shields reserve_price
-│   │       └── BidResource.php                  # Bidder details and amount
+│   │       ├── AuctionResource.php          # Public telemetry; shields reserve_price
+│   │       └── BidResource.php
 │   ├── Models/
 │   │   ├── Auction.php
 │   │   └── Bid.php
 │   ├── Policies/
-│   │   └── AuctionPolicy.php                    # Role and ownership authorization
+│   │   └── AuctionPolicy.php                # Artisan ownership and status authorization
 │   ├── Providers/
-│   │   └── AuctionModuleServiceProvider.php     # Rate limiting, policies, routes & channels
+│   │   └── AuctionModuleServiceProvider.php # Rate limiting, policies, routes & channels
 │   └── Services/
-│       ├── AuctionService.php                   # CRUD, metrics, idempotent closeExpired()
-│       └── BidService.php                       # lockForUpdate() bidding & concurrency
-├── database/
-│   ├── factories/
-│   │   ├── AuctionFactory.php
-│   │   └── BidFactory.php
-│   └── migrations/
-│       ├── 2024_01_01_000006_create_auctions_table.php
-│       └── 2024_01_01_000007_create_bids_table.php
+│       ├── AuctionService.php               # CRUD, metrics, idempotent closeExpired()
+│       └── BidService.php                   # lockForUpdate() bidding & concurrency
 ├── routes/
-│   ├── api.php                                  # REST endpoints (/api/v1/auctions/...)
-│   └── channels.php                             # Broadcast channel auth: auction.{id}
+│   ├── api.php                              # REST endpoints (/api/v1/auctions/...)
+│   └── channels.php                         # Broadcast channel auth: auction.{id}
 └── tests/
-    └── Feature/
-        ├── ArtisanAuctionApiTest.php
-        ├── BuyerBidApiTest.php
-        ├── PublicAuctionApiTest.php
-        ├── CloseExpiredAuctionsTest.php
-        └── AuctionBroadcastingTest.php          # Reverb channel authorization tests
+    └── Feature/                             # Bidding, Broadcasting, and Sweeper tests
+```
+
+### Dependencies on Other Modules
+- `Modules/Auth`: Depends on `User` and `Artisan` models for bidder and owner relationships.
+- `Modules/Product`: Depends on `Product` and `Category` models for auction item relationships.
+
+### Design Decisions (Why, Not Just What)
+- **Pessimistic Concurrency (`lockForUpdate`):** In the final seconds of an auction ("bid sniping"), multiple buyers submit bids simultaneously. We acquire an exclusive MySQL row lock on the auction record inside a database transaction to serialize requests and prevent race conditions.
+- **Instant Broadcast (`ShouldBroadcastNow`):** Instead of queuing WebSocket push jobs behind slow email jobs, `BidPlaced` dispatches synchronously to Laravel Reverb for sub-50ms fan-out.
+
+---
+
+## 4. Data Model
+
+```mermaid
+erDiagram
+    artisans ||--o{ auctions : "creates"
+    products ||--o| auctions : "auctioned item"
+    users ||--o{ bids : "places"
+    auctions ||--o{ bids : "receives"
+
+    auctions {
+        bigint id PK
+        bigint artisan_id FK
+        bigint product_id FK
+        decimal starting_price
+        decimal current_price
+        decimal reserve_price
+        enum status "scheduled, active, ended, cancelled"
+        timestamp starts_at
+        timestamp ends_at
+        bigint winner_id FK
+        bigint winning_bid_id FK
+    }
+
+    bids {
+        bigint id PK
+        bigint auction_id FK
+        bigint user_id FK
+        decimal amount
+        timestamps created_at
+    }
 ```
 
 ---
 
-## 2. Full End-to-End Auction Lifecycle
+## 5. Core Flows
 
+### A. Live Bidding & Real-Time WebSocket Push Flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Buyer as Buyer
+    participant Ctrl as BuyerBidApiController
+    participant Svc as BidService
+    participant DB as MySQL (InnoDB)
+    participant Reverb as Laravel Reverb (WebSocket)
+    actor Viewers as Connected Bidders
+
+    Buyer->>Ctrl: POST /api/v1/auctions/{id}/bids { amount: 1500 }
+    Ctrl->>Svc: placeBid(auction, user, amount)
+    Svc->>DB: DB::transaction()
+    Svc->>DB: SELECT * FROM auctions WHERE id = ? FOR UPDATE
+    Note over Svc,DB: Exclusive row-level lock acquired
+    Svc->>Svc: Validate: status == active && now() < ends_at && amount > current_price
+    alt Validation Fails (e.g. Underbid or Ended)
+        Svc-->>Ctrl: Abort 422 Unprocessable Entity
+        Ctrl-->>Buyer: 422: Bid must exceed current price
+    else Valid Bid
+        Svc->>DB: INSERT INTO bids (auction_id, user_id, amount)
+        Svc->>DB: UPDATE auctions SET current_price = 1500
+        Svc->>DB: COMMIT transaction (lock released)
+        Svc->>Reverb: broadcast(new BidPlaced(bid))->toOthers()
+        Reverb-->>Viewers: Push WebSocket frame to private-auction.{id}
+        Svc-->>Ctrl: Bid model
+        Ctrl-->>Buyer: 201 Created + BidResource JSON
+    end
 ```
-[1. Creation]
-Artisan creates auction (POST /api/v1/artisan/auctions)
-  └─ Sets starting_price, reserve_price (hidden), starts_at, ends_at.
-  └─ Status: `scheduled`
 
-[2. Activation]
-When now() >= starts_at:
-  └─ Status transitions to `active`. Bidding opens to authenticated buyers.
+### B. Automated Sweeper & Winner Determination Flow
 
-[3. Live Bidding & Real-Time Broadcasting]
-Buyer places bid (POST /api/v1/auctions/{id}/bids)
-  ├─ BidService locks target auction row with `lockForUpdate()` in DB transaction.
-  ├─ Validates bid > current_price and auction is active.
-  ├─ Updates `current_price` and persists `Bid` record.
-  └─ Dispatches `BidPlaced` event (implements ShouldBroadcastNow).
-       └─ Laravel API pushes payload to Laravel Reverb (:8080).
-       └─ Reverb fans out WebSocket frame to all connected clients on `private-auction.{id}`.
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Cron as Linux Cron / Scheduler
+    participant Cmd as CloseExpiredAuctionsCommand
+    participant Svc as AuctionService
+    participant DB as MySQL
+    participant Reverb as Laravel Reverb
 
-[4. Expiration Sweeper & Resolution]
-Scheduler runs `php artisan auctions:close-expired` every minute:
-  ├─ Finds active auctions where now() >= ends_at.
-  ├─ Evaluates highest bid against `reserve_price`:
-  │    ├─ If highest bid >= reserve_price:
-  │    │    └─ Status: `ended`, winner_id = highest bidder, winning_bid_id set.
-  │    └─ If highest bid < reserve_price (or no bids):
-  │         └─ Status: `ended`, winner_id = null (reserve not met).
-  └─ Dispatches `AuctionClosed` event.
-       └─ Reverb broadcasts closing outcome & winner details to `private-auction.{id}`.
+    Cron->>Cmd: php artisan auctions:close-expired (Every minute)
+    Cmd->>Svc: closeExpired()
+    Svc->>DB: SELECT * FROM auctions WHERE status = 'active' AND ends_at <= NOW()
+    loop For each expired auction
+        Svc->>DB: Fetch highest bid
+        alt Highest Bid >= reserve_price
+            Svc->>DB: UPDATE auctions SET status = 'ended', winner_id = highest_bidder
+        else Reserve not met or zero bids
+            Svc->>DB: UPDATE auctions SET status = 'ended', winner_id = NULL
+        end
+        Svc->>Reverb: broadcast(new AuctionClosed(auction))
+        Reverb-->>Reverb: Push winner announcement to private-auction.{id}
+    end
+    Cmd-->>Cron: Finished with count of closed auctions (Idempotent)
 ```
 
 ---
 
-## 3. API Endpoints Map (`/api/v1`)
+## 6. API Reference
 
 ### Public Endpoints
+
 | Method | Endpoint | Query Filters | Description |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/v1/auctions` | `status=live\|scheduled\|ended`, `category`, `search`, `sort`, `per_page` | Paginated public auction catalog |
-| `GET` | `/api/v1/auctions/{idOrSlug}` | None | Detailed auction view with public bid history |
+| `GET` | `/api/v1/auctions` | `status`, `category`, `search`, `sort`, `per_page` | Paginated public auction catalog. |
+| `GET` | `/api/v1/auctions/{idOrSlug}` | None | Detailed view with bid history. `reserve_price` is strictly hidden. |
 
 ### Buyer Endpoints (`auth:sanctum`)
-| Method | Endpoint | Middleware / Gate | Description |
+
+| Method | Endpoint | Rate Limit | Description |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/v1/auctions/{auction}/bids` | `throttle:bidding` (30/min) | Place a bid on an active auction |
-| `GET` | `/api/v1/buyer/bids` | None | View paginated list of bids placed by the buyer |
-| `DELETE` | `/api/v1/buyer/bids/{bid}` | Owner only, active auction | Withdraw an active bid |
+| `POST` | `/api/v1/auctions/{auction}/bids` | `throttle:bidding` (30/min) | Places a bid under pessimistic row-locking. |
+| `GET` | `/api/v1/buyer/bids` | None | Paginated history of bids placed by the user. |
+| `DELETE`| `/api/v1/buyer/bids/{bid}` | None | Withdraw active bid (allowed only before auction closes). |
 
-### Artisan Endpoints (`auth:sanctum`)
-| Method | Endpoint | Policy Check | Description |
+### Artisan Endpoints (`auth:sanctum`, `role:artisan`)
+
+| Method | Endpoint | Form Request | Description |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/v1/artisan/auctions` | Verified Artisan | List artisan's auctions with summary stats |
-| `POST` | `/api/v1/artisan/auctions` | Verified Artisan | Create auction (`starts_at`, `ends_at`, `starting_price`, `reserve_price`) |
-| `PATCH`| `/api/v1/artisan/auctions/{auction}`| Owner, No bids, Scheduled | Update auction details before start |
-| `DELETE`| `/api/v1/artisan/auctions/{auction}/cancel`| Owner, Scheduled or Active | Cancel auction |
+| `GET` | `/api/v1/artisan/auctions` | None | List artisan's auctions with summary stats. |
+| `POST` | `/api/v1/artisan/auctions` | `StoreAuctionRequest` | Create auction (`starting_price`, `reserve_price`, time window). |
+| `PATCH`| `/api/v1/artisan/auctions/{auction}` | `UpdateAuctionRequest` | Update details before start (only when zero bids exist). |
+| `DELETE`| `/api/v1/artisan/auctions/{auction}/cancel` | None | Cancels a scheduled or active auction. |
 
 ---
 
-## 4. High-Concurrency Safeguards ("Bid Sniping")
+## 7. Events, Jobs & Commands
 
-Under extreme concurrency scenarios (e.g. hundreds of bids submitted in the closing seconds):
-1. [BidService.php](file:///c:/laragon/www/Lamsa.ma/Modules/Auction/app/Services/BidService.php) acquires an exclusive pessimistic row lock on the `Auction` record using `lockForUpdate()` inside a MySQL `DB::transaction()`.
-2. Incoming simultaneous requests are serialized by InnoDB.
-3. Each request re-evaluates the bid against the **freshly committed database price**, preventing stale price overwrites or race conditions.
-4. If a bid does not strictly exceed the highest existing bid, it aborts cleanly with `HTTP 422 Unprocessable Entity`.
-5. The `bidding` rate limiter protects against automated spam scripts (30 bids/min per user).
-
----
-
-## 5. Real-Time WebSockets & Broadcasting
-
-The module broadcasts two real-time events implementing `ShouldBroadcastNow`:
-1. **`BidPlaced`**: Broadcasts the new bid amount, bidder name, and timestamp.
-2. **`AuctionClosed`**: Broadcasts the winning bidder, winning amount, and reserve met flag.
-
-Both events broadcast to the private channel:
-$$\text{private-auction.\{auction\_id\}}$$
-
-### Channel Authorization
-Channel authorization is encapsulated in [Modules/Auction/routes/channels.php](file:///c:/laragon/www/Lamsa.ma/Modules/Auction/routes/channels.php):
-```php
-Broadcast::channel('auction.{id}', function (User $user, int $id): bool {
-    // Authenticated users with a valid Sanctum token can listen to live bids
-    return true;
-}, ['guards' => ['sanctum']]);
-```
-
-### Frontend Integration (Client-Side)
-External frontend clients (Next.js, Vue, React, mobile) connect via `laravel-echo` and `pusher-js`:
-```javascript
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-
-const echo = new Echo({
-    broadcaster: 'reverb',
-    key: process.env.NEXT_PUBLIC_REVERB_APP_KEY,
-    wsHost: 'api.lamsa.ma',
-    wsPort: 8080,
-    authEndpoint: 'https://api.lamsa.ma/broadcasting/auth',
-    auth: {
-        headers: {
-            Authorization: `Bearer ${userSanctumToken}`,
-        },
-    },
-});
-
-// Subscribe to the auction room:
-echo.private(`auction.${auctionId}`)
-    .listen('.BidPlaced', (event) => {
-        console.log('New Bid:', event.amount, event.bidder_name);
-    })
-    .listen('.AuctionClosed', (event) => {
-        console.log('Auction Ended! Winner:', event.winner_name);
-    });
-```
+| Name | Type | Channel / Schedule | Purpose |
+| :--- | :--- | :--- | :--- |
+| `BidPlaced` | Broadcast Event | `private-auction.{id}` | Pushes new bid amount and bidder name in real-time. |
+| `AuctionClosed` | Broadcast Event | `private-auction.{id}` | Pushes final winner name, amount, and reserve-met status. |
+| `auctions:close-expired` | Artisan Command | `* * * * *` (Every min) | Sweeper evaluating expired auctions idempotently. |
 
 ---
 
-## 6. Automated Sweeper & Scheduled Command
+## 8. Business Rules & Edge Cases
 
-The module provides [CloseExpiredAuctionsCommand.php](file:///c:/laragon/www/Lamsa.ma/Modules/Auction/app/Console/Commands/CloseExpiredAuctionsCommand.php):
+1. **Reserve Price Confidentiality:** The `reserve_price` column is confidential. Buyers must never see it in API JSON payloads; only the artisan owner can view it.
+2. **Pessimistic Locking Concurrency:** All bids execute inside `DB::transaction()` using `lockForUpdate()`. Concurrent bids are queued by InnoDB; stale prices are rejected automatically.
+3. **Idempotent Sweeper:** Running `auctions:close-expired` multiple times produces zero duplicate state changes or side effects.
+
+---
+
+## 9. Caching Strategy
+
+- **Real-Time Read Isolation:** Live active auction endpoints do **not** use long-lived application caching to prevent serving stale prices during fast-paced bidding wars.
+- **Cache-Control:** Bidding endpoints return `Cache-Control: no-cache, private`. Completed/historical auctions can be cached with `Cache-Control: public, max-age=3600`.
+
+---
+
+## 10. Testing & Quality
+
 ```bash
-php artisan auctions:close-expired
-```
-
-It invokes [AuctionService::closeExpired()](file:///c:/laragon/www/Lamsa.ma/Modules/Auction/app/Services/AuctionService.php), which:
-* Sweeps all active auctions where `ends_at <= now()`.
-* Evaluates bids against the confidential `reserve_price`.
-* Transitions state to `ended` and broadcasts `AuctionClosed`.
-* Is **100% idempotent**: Executing it repeatedly produces zero duplicate state changes or side effects.
-
-### Scheduler Configuration
-Configured in [routes/console.php](file:///c:/laragon/www/Lamsa.ma/routes/console.php):
-```php
-use Illuminate\Support\Facades\Schedule;
-
-Schedule::command('auctions:close-expired')
-    ->everyMinute()
-    ->withoutOverlapping()
-    ->runInBackground();
-```
-
----
-
-## 7. Testing & Quality Assurance
-
-Run all test suites for the Auction module:
-```bash
-# Run feature test suite (29 tests)
+# Run all Auction feature tests (Bidding, Sweeper, Reverb auth)
 php artisan test Modules/Auction/tests/Feature
 
-# Static analysis (Larastan Level 5)
-./vendor/bin/phpstan analyse Modules/Auction
-
-# Code style formatting (Laravel Pint)
-./vendor/bin/pint Modules/Auction
+# Inspect formatting
+vendor/bin/pint --test Modules/Auction
 ```
+
+---
+
+## 11. Known Limitations & Roadmap
+
+- **Automatic Bid Increments (Proxy Bidding):** Currently buyers place manual static bids. Max-bid auto-increment proxy bidding (eBay-style) is planned for Phase 2.
+- **Automatic Anti-Sniping Extension:** Extending the auction timer by 2 minutes if a bid is placed in the final 60 seconds is in the development roadmap.

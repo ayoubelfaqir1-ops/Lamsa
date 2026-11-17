@@ -1,0 +1,15 @@
+# /etc/supervisor/conf.d/lamsa-worker.conf
+
+[program:lamsa-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/Lamsa.ma/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/Lamsa.ma/storage/logs/worker.log
+stopwaitsecs=3600
+
