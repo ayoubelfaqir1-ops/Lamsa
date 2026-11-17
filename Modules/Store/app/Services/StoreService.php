@@ -26,7 +26,7 @@ class StoreService
         $logoPath = null;
 
         if ($logo) {
-            $logoPath = $logo->store('stores/logos', 'public');
+            $logoPath = $logo->store('stores/logos', $this->storageDisk());
         }
 
         /** @var Store $store */
@@ -68,9 +68,9 @@ class StoreService
 
         if ($logo) {
             if ($store->logo) {
-                Storage::disk('public')->delete($store->logo);
+                Storage::disk($this->storageDisk())->delete($store->logo);
             }
-            $attributes['logo'] = $logo->store('stores/logos', 'public');
+            $attributes['logo'] = $logo->store('stores/logos', $this->storageDisk());
         }
 
         $store->update($attributes);
@@ -84,11 +84,19 @@ class StoreService
     public function deleteLogo(Store $store): Store
     {
         if ($store->logo) {
-            Storage::disk('public')->delete($store->logo);
+            Storage::disk($this->storageDisk())->delete($store->logo);
             $store->update(['logo' => null]);
         }
 
         return $store->fresh();
+    }
+
+    /**
+     * Get the configured storage disk for media files.
+     */
+    protected function storageDisk(): string
+    {
+        return (string) config('filesystems.media_disk', 'public');
     }
 
     /**
