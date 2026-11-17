@@ -31,4 +31,3 @@ class CategoryObserver
         Cache::forget('active_categories_list');
     }
 }
-

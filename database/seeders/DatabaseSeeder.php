@@ -6,6 +6,7 @@ use App\Enums\ArtisanStatus;
 use App\Models\Store;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Modules\Auction\Models\Auction;
 use Modules\Auth\Models\Artisan;
 use Modules\Auth\Models\User;
 use Modules\Order\Enums\OrderStatus;

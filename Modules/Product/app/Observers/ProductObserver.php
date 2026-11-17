@@ -31,4 +31,3 @@ class ProductObserver
         Cache::forget('active_categories_list');
     }
 }
-
