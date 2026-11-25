@@ -1,168 +1,228 @@
-# Order Module Documentation
+# Order Module
 
-Welcome to the **Order Module** for **Lamsa.ma**. This document serves as the comprehensive architectural and technical reference for developers maintaining or extending the purchasing, shopping cart, checkout, and order fulfillment systems.
+> Multi-vendor shopping cart, atomic checkout with pessimistic inventory locking, per-artisan sub-order splitting, and fulfillment state machine. Status: `stable`
 
 ---
 
-## 1. Domain Overview & Bounded Context
+## 1. Overview
 
-In Domain-Driven Design (DDD), the purchasing workflow is divided into three distinct lifecycle phases:
+The **Order Module** manages the core transactional commerce lifecycle for Lamsa.ma. It handles buyer shopping baskets, guest-to-authenticated cart synchronization, atomic multi-vendor checkout, and order fulfillment state machines for Moroccan artisans.
 
+- **Who Uses It:**
+  - **Buyers:** Add items to cart, synchronize guest baskets upon login, execute checkout, track and cancel pending orders.
+  - **Artisans:** Inspect incoming orders for their handcrafted items, transition fulfillment status (`processing` $\rightarrow$ `shipped` $\rightarrow$ `delivered`).
+  - **Admins:** Global order inspection and customer dispute management.
+- **What It Does NOT Do:**
+  - It does **not** manage general product catalog listings (handled by [`Modules/Product`](../Product/README.md)).
+  - It does **not** manage live competitive auctions (handled by [`Modules/Auction`](../Auction/README.md)).
+
+---
+
+## 2. Quick Start
+
+### Database Migrations
+- `create_carts_table`
+- `create_cart_items_table`
+- `create_orders_table`
+- `create_order_items_table`
+
+### Running Module Tests
+```bash
+php artisan test Modules/Order/tests/Feature
 ```
-┌─────────────────────────┐       ┌─────────────────────────┐       ┌─────────────────────────┐
-│          CART           │ ───►  │        CHECKOUT         │ ───►  │          ORDER          │
-│   (Mutable Session)     │       │   (Atomic Transition)   │       │   (Immutable Contract)  │
-└─────────────────────────┘       └─────────────────────────┘       └─────────────────────────┘
+
+---
+
+## 3. Architecture
+
+### Key File Structure
+```
+Modules/Order/
+├── app/
+│   ├── Enums/
+│   │   ├── OrderStatus.php               # pending, processing, shipped, delivered, cancelled
+│   │   └── PaymentStatus.php             # unpaid, paid, cash_on_delivery
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── CartApiController.php     # Cart management & guest sync
+│   │   │   ├── CheckoutApiController.php # Atomic checkout endpoint
+│   │   │   ├── BuyerOrderApiController.php # Buyer order tracking & cancellation
+│   │   │   └── ArtisanOrderApiController.php # Artisan fulfillment updates
+│   │   ├── Requests/                     # CheckoutRequest, AddCartItemRequest, etc.
+│   │   └── Resources/                    # CartResource, OrderResource, OrderItemResource
+│   ├── Models/
+│   │   ├── Cart.php
+│   │   ├── CartItem.php
+│   │   ├── Order.php
+│   │   └── OrderItem.php                 # Price & product name snapshot record
+│   ├── Policies/
+│   │   └── OrderPolicy.php               # Buyer cancellation & artisan fulfillment gates
+│   ├── Providers/
+│   │   └── OrderModuleServiceProvider.php # Rate limiting & route definitions
+│   └── Services/
+│       ├── CartService.php               # Guest sync & basket management
+│       ├── OrderCheckoutService.php      # lockForUpdate() inventory & order splitting
+│       └── OrderService.php              # State machine transitions & stock restoration
+└── routes/
+    └── api.php                           # /api/v1/cart, /api/v1/checkout, /api/v1/orders
 ```
 
-1. **Cart (Pre-Purchase / Mutable):** Temporary buyer basket. Items can be added, modified, removed, or merged from client-side guest storage.
-2. **Checkout (Transition / Atomic):** Transitioning buyer intent into legal vendor contracts. Performs concurrency row locking, verifies live availability and prices, splits items into per-artisan sub-orders, decrements inventory, snapshots product data, and flushes the basket.
-3. **Order & OrderItem (Post-Purchase / Immutable):** Permanent financial and fulfillment records. Tracks multi-stage delivery state machines for buyers and artisans.
+### Dependencies on Other Modules
+- `Modules/Auth`: Depends on `User` (buyer) and `Artisan` (vendor).
+- `Modules/Product`: Depends on `Product` (stock decrement, price check, category details).
+
+### Design Decisions (Why, Not Just What)
+- **Multi-Vendor Order Splitting:** In a Moroccan marketplace, an order containing pottery from Fez and leather from Marrakech cannot share a single shipment. Checkout automatically splits the cart by `artisan_id`, generating independent `Order` records for each vendor.
+- **Pessimistic Row-Level Locking:** During checkout, `lockForUpdate()` locks both the buyer's `cart` and all purchased `products` rows inside a single database transaction. This makes double-spend inventory bugs mathematically impossible.
+- **Immutable Historical Snapshots:** Products change prices and names over time. `order_items` stores historical snapshot columns (`product_name`, `unit_price`), ensuring accounting records never alter when an artisan modifies their catalog.
 
 ---
 
-## 2. Database Architecture & Schemas
+## 4. Data Model
 
-The module defines 4 core tables under `Modules/Order/database/migrations/`:
+```mermaid
+erDiagram
+    users ||--o| carts : "owns"
+    carts ||--o{ cart_items : "contains"
+    products ||--o{ cart_items : "referenced"
 
-### A. `carts` & `cart_items`
-* `carts`
-  * `id`: Primary Key.
-  * `user_id`: Foreign Key (`users.id`, `cascadeOnDelete`, indexed). Each registered buyer has exactly one cart record (`firstOrCreate`).
-* `cart_items`
-  * `id`: Primary Key.
-  * `cart_id`: Foreign Key (`carts.id`, `cascadeOnDelete`, indexed).
-  * `product_id`: Foreign Key (`products.id`, `cascadeOnDelete`, indexed).
-  * `quantity`: Unsigned integer (`min: 1`).
-  * `unique(['cart_id', 'product_id'])`: Prevents duplicate rows for the same product; quantities are incremented instead.
+    users ||--o{ orders : "places"
+    artisans ||--o{ orders : "fulfills"
+    orders ||--o{ order_items : "contains"
+    products ||--o{ order_items : "snapshotted"
 
-### B. `orders` & `order_items`
-* `orders`
-  * `id`: Primary Key.
-  * `user_id`: Foreign Key (`users.id`, `cascadeOnDelete`, indexed) — the buyer.
-  * `artisan_id`: Foreign Key (`artisans.id`, `cascadeOnDelete`, indexed) — the vendor fulfilling this sub-order.
-  * `status`: String enum (`pending`, `processing`, `shipped`, `delivered`, `cancelled`).
-  * `total_amount`: Decimal (10, 2) — sum of `(quantity * unit_price)` for this specific artisan's items.
-  * `shipping_address`: Text.
-  * `payment_method`: String (`cash`, `card`).
-  * `payment_status`: String (`unpaid`, `paid`, `cash_on_delivery`).
-  * `notes`: Nullable string.
-* `order_items`
-  * `id`: Primary Key.
-  * `order_id`: Foreign Key (`orders.id`, `cascadeOnDelete`, indexed).
-  * `product_id`: Foreign Key (`products.id`, `restrictOnDelete`, indexed).
-  * `artisan_id`: Foreign Key (`artisans.id`, `restrictOnDelete`, indexed).
-  * `product_name`: **Snapshot string**. Captures the product name at checkout time.
-  * `quantity`: Unsigned integer.
-  * `unit_price`: **Snapshot decimal (10, 2)**. Captures unit price at purchase time.
+    orders {
+        bigint id PK
+        bigint user_id FK
+        bigint artisan_id FK
+        enum status "pending, processing, shipped, delivered, cancelled"
+        decimal total_amount
+        text shipping_address
+        string payment_method
+        string payment_status
+        timestamps created_at
+    }
 
----
-
-## 3. Core Services & Underlying Mechanics
-
-### A. `CartService` ([Modules/Order/app/Services/CartService.php](file:///c:/laragon/www/Lamsa.ma/Modules/Order/app/Services/CartService.php))
-- **Stateless REST Architecture:** Eliminates PHP server-side cookie sessions (`session('cart')`). Mobile and web frontends store unauthenticated items locally.
-- **Guest-to-User Merging (`sync`):** On login, the client submits guest items via `POST /api/v1/cart/sync`. The service merges them with any items already present in the user's database cart, automatically clamping quantities so `existing + guest <= live_stock`.
-- **Eager Loading without Restrictive Scopes:** Carts load products along with `category` and `store` without filtering out inactive or soft-deleted products. This allows [CartItemResource](file:///c:/laragon/www/Lamsa.ma/Modules/Order/app/Http/Resources/CartItemResource.php) to calculate `is_available: false` and render the product title, rather than rendering a broken, missing record.
-
-### B. `OrderCheckoutService` ([Modules/Order/app/Services/OrderCheckoutService.php](file:///c:/laragon/www/Lamsa.ma/Modules/Order/app/Services/OrderCheckoutService.php))
-- **Two-Level Row-Level Locking (`lockForUpdate`):**
-  1. Acquires an exclusive row lock on the user's `carts` record (`SELECT ... FOR UPDATE`).
-  2. Acquires exclusive row locks on the purchased `products` records.
-- **Race Condition Immunity:** If a user submits duplicate checkout requests simultaneously (e.g. double-tapping "Place Order" on high latency), the second request is queued by MySQL engine locks until the first transaction commits. When the second transaction runs, it finds the cart already empty and safely aborts.
-- **Multi-Vendor Order Splitting:** Items are grouped by `artisan_id`. A multi-artisan checkout produces separate, decoupled `Order` records, allowing each artisan to manage their own shipments independently.
-- **Authoritative Pricing:** Ignores any client-supplied price or stale cart value. Totals and snapshots are calculated strictly from live database prices at the millisecond of checkout.
-
-### C. `OrderService` ([Modules/Order/app/Services/OrderService.php](file:///c:/laragon/www/Lamsa.ma/Modules/Order/app/Services/OrderService.php))
-- **Order State Machine:** Enforces valid status transitions:
-  * `Pending` $\rightarrow$ `Processing` or `Cancelled`
-  * `Processing` $\rightarrow$ `Shipped` or `Cancelled`
-  * `Shipped` $\rightarrow$ `Delivered`
-- **Soft-Delete Stock Restoration:** When a buyer cancels a pending order, the service restores stock (`$item->product?->increment('stock', $item->quantity)`). Because `OrderItem::product()` uses `withTrashed()`, stock is restored even if the artisan soft-deleted the product after the order was placed.
+    order_items {
+        bigint id PK
+        bigint order_id FK
+        bigint product_id FK
+        bigint artisan_id FK
+        string product_name
+        int quantity
+        decimal unit_price
+    }
+```
 
 ---
 
-## 4. Order Lifecycle & Authorization Matrix
+## 5. Core Flows
 
-| User Role | Action | Allowed Statuses | Policy Gate |
+### Atomic Checkout & Multi-Vendor Order Splitting Flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Buyer as Buyer
+    participant Ctrl as CheckoutApiController
+    participant Svc as OrderCheckoutService
+    participant DB as MySQL (InnoDB)
+
+    Buyer->>Ctrl: POST /api/v1/checkout { shipping_address, payment_method }
+    Ctrl->>Svc: checkout(user, payload)
+    Svc->>DB: DB::transaction()
+    Svc->>DB: SELECT * FROM carts WHERE user_id = ? FOR UPDATE
+    Svc->>DB: SELECT * FROM products WHERE id IN (...) FOR UPDATE
+    Note over Svc,DB: Exclusive row-level locks on Cart and Products
+
+    alt Cart is empty or Items unavailable / Out of stock
+        Svc-->>Ctrl: Abort 422 Unprocessable Entity
+        Ctrl-->>Buyer: 422: Item unavailable or insufficient stock
+    else All items valid
+        loop For each artisan group in cart
+            Svc->>DB: INSERT INTO orders (user_id, artisan_id, total, status: pending)
+            loop For each item belonging to this artisan
+                Svc->>DB: INSERT INTO order_items (snapshot product_name, price, qty)
+                Svc->>DB: UPDATE products SET stock = stock - qty
+            end
+        end
+        Svc->>DB: DELETE FROM cart_items WHERE cart_id = ?
+        Svc->>DB: COMMIT transaction (locks released)
+        Svc-->>Ctrl: Collection of created Order models
+        Ctrl-->>Buyer: 201 Created + OrderResource JSON
+    end
+```
+
+---
+
+## 6. API Reference
+
+### Shopping Cart Endpoints (`auth:sanctum`)
+
+| Method | Endpoint | Form Request | Description |
 | :--- | :--- | :--- | :--- |
-| **Buyer** | View their orders | Any | [OrderPolicy@view](file:///c:/laragon/www/Lamsa.ma/Modules/Order/app/Policies/OrderPolicy.php) (`$order->user_id === $user->id`) |
-| **Buyer** | Cancel order | `pending` only | [OrderPolicy@cancel](file:///c:/laragon/www/Lamsa.ma/Modules/Order/app/Policies/OrderPolicy.php) (restores inventory) |
-| **Artisan** | View received orders | Any | [OrderPolicy@view](file:///c:/laragon/www/Lamsa.ma/Modules/Order/app/Policies/OrderPolicy.php) (`$order->artisan_id === $user->artisan->id`) |
-| **Artisan** | Update status | `processing` $\rightarrow$ `shipped` $\rightarrow$ `delivered` | [OrderPolicy@updateStatus](file:///c:/laragon/www/Lamsa.ma/Modules/Order/app/Policies/OrderPolicy.php) |
-| **Admin** | Full management | Any status | Bypasses ownership constraints |
+| `GET` | `/api/v1/cart` | None | Fetch user's cart items, totals, and live availability. |
+| `POST` | `/api/v1/cart/items/{product}` | `AddCartItemRequest` | Add product to cart with requested quantity. |
+| `PATCH`| `/api/v1/cart/items/{product}` | `UpdateCartItemRequest`| Update quantity of existing cart item. |
+| `DELETE`|`/api/v1/cart/items/{product}` | None | Remove a specific product from cart. |
+| `DELETE`|`/api/v1/cart` | None | Clears the shopping cart completely. |
+| `POST` | `/api/v1/cart/sync` | `SyncCartRequest` | Merges unauthenticated guest items into the user's database cart. |
 
----
+### Checkout Endpoint (`auth:sanctum`)
 
-## 5. REST API Route Map
-
-All routes are prefixed with `/api/v1` and protected under `auth:sanctum`.
-
-### A. Shopping Cart (`/api/v1/cart`)
-
-| Method | Endpoint | Form Request | Purpose |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/cart` | None | Fetch current user's cart, items, live availability, and totals. |
-| `POST` | `/cart/items/{product}` | `AddCartItemRequest` | Add item to cart (`quantity`). Validates active status and stock. |
-| `PATCH` | `/cart/items/{product}` | `UpdateCartItemRequest`| Update existing item quantity (`quantity`). |
-| `DELETE`| `/cart/items/{product}` | None | Remove a specific product from the cart. |
-| `DELETE`| `/cart` | None | Clear all items from the cart. |
-| `POST` | `/cart/sync` | `SyncCartRequest` | Merge client-side guest cart items on login (`items: [{ product_id, quantity }]`). |
-
-### B. Checkout (`/api/v1/checkout`)
-
-| Method | Endpoint | Middleware | Form Request | Purpose |
+| Method | Endpoint | Rate Limit | Form Request | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/checkout` | `throttle:checkout` | `CheckoutRequest` | Atomic checkout. Validates stock, locks rows, decrements inventory, splits orders by artisan, snapshots products, and clears cart. |
+| `POST` | `/api/v1/checkout` | `throttle:checkout` (10/min) | `CheckoutRequest` | Atomic checkout with inventory lock & order splitting. |
 
-### C. Buyer Orders (`/api/v1/buyer/orders`)
+### Order Tracking & Fulfillment Endpoints (`auth:sanctum`)
 
-| Method | Endpoint | Policy Check | Purpose |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/buyer/orders` | `viewAny` | Paginated listing of orders placed by authenticated user (`?per_page=10`). |
-| `GET` | `/buyer/orders/{order}` | `view` | View order details, items, artisan store info, and shipment status. |
-| `POST` | `/buyer/orders/{order}/cancel` | `cancel` | Cancel pending order. Automatically restores stock for all items. |
-
-### D. Artisan Orders (`/api/v1/artisan/orders`)
-
-| Method | Endpoint | Form Request | Policy Check | Purpose |
+| Method | Endpoint | Role | Policy Gate | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/artisan/orders` | None | `artisan` role | Paginated listing of incoming orders for the artisan's store. |
-| `GET` | `/artisan/orders/{order}` | None | `view` | View order items and buyer delivery details. |
-| `PATCH`| `/artisan/orders/{order}/status` | `UpdateOrderStatusRequest` | `updateStatus` | Advance order status (`status: shipped` or `delivered`). |
+| `GET` | `/api/v1/buyer/orders` | Buyer | `viewAny` | Paginated listing of orders placed by user. |
+| `GET` | `/api/v1/buyer/orders/{order}` | Buyer | `view` | View order details and delivery progress. |
+| `POST`| `/api/v1/buyer/orders/{order}/cancel` | Buyer | `cancel` | Cancels pending order and restores stock. |
+| `GET` | `/api/v1/artisan/orders` | Artisan | `artisan` role | List incoming customer orders for artisan. |
+| `PATCH`|`/api/v1/artisan/orders/{order}/status` | Artisan | `updateStatus` | Updates status (`processing` $\rightarrow$ `shipped` $\rightarrow$ `delivered`). |
 
 ---
 
-## 6. Edge Cases & Invariants Fortified
+## 7. Events, Jobs & Commands
 
-1. **Concurrent Double-Checkout Immunity:** Row-level locking on `Cart` serializes checkout attempts from the same buyer; duplicate requests safely return HTTP 422 (`"Your cart is empty."`).
-2. **Soft-Deleted Product Resilience:** `OrderItem::product()` and `CartItem::product()` utilize `->withTrashed()`. Soft-deleting an item after purchase does not corrupt invoices or fail order cancellation stock restores.
-3. **Stale/Unavailable Cart Detection:** [CartResource](file:///c:/laragon/www/Lamsa.ma/Modules/Order/app/Http/Resources/CartResource.php) flags `has_unavailable_items: true` and isolates `is_available: false` items, excluding them from `total_price` so users can resolve inventory issues before checkout.
-4. **Authoritative Price Synchronization:** Checkout calculates totals from fresh database records, preventing exploits where clients try to check out using older, cheaper prices.
-5. **Guest Cart Overflow Capping:** Merging guest items into pre-existing cart items dynamically clamps quantities to the maximum available stock.
+| Name | Type | Trigger | Purpose |
+| :--- | :--- | :--- | :--- |
+| `OrderCreated` | Event | Dispatched per sub-order on checkout | Triggers customer receipt & artisan notification |
+| `OrderStatusUpdated` | Event | Dispatched when artisan updates status | Triggers tracking email/notification to buyer |
 
 ---
 
-## 7. Quality Assurance & Testing
+## 8. Business Rules & Edge Cases
 
-The module maintains 100% test coverage for all features, policies, and edge cases.
+1. **Concurrent Double-Checkout Immunity:** Locking the `carts` row serializes duplicate clicks on "Place Order". The second attempt finds the cart empty and aborts with `HTTP 422`.
+2. **Soft-Deleted Product Resilience:** Order item relationships use `->withTrashed()`. An artisan soft-deleting an item after a sale never breaks invoices or buyer order cancellations.
+3. **Automatic Stock Restoration on Cancellation:** When a buyer cancels a `pending` order, the system restores stock for all item rows via `increment('stock', $qty)`.
 
-### Run Module Tests
+---
+
+## 9. Caching Strategy
+
+- **Transactional Bypassing:** Shopping carts and checkout bypass query cache to ensure 100% accurate, authoritative inventory levels and pricing.
+- **Cache-Control:** All cart, checkout, and order endpoints return `Cache-Control: no-cache, private`.
+
+---
+
+## 10. Testing & Quality
+
 ```bash
-php artisan test Modules/Order
+# Run all Order feature tests (Cart, Checkout, Fulfillment, Stock restoration)
+php artisan test Modules/Order/tests/Feature
+
+# Inspect formatting
+vendor/bin/pint --test Modules/Order
 ```
 
-### Run Full Application Suite
-```bash
-php artisan test
-```
+---
 
-### Static Analysis (Larastan Level 5+)
-```bash
-./vendor/bin/phpstan analyse --memory-limit=2G
-```
+## 11. Known Limitations & Roadmap
 
-### Code Style (Laravel Pint)
-```bash
-php vendor/bin/pint --test
-```
+- **Integrated Online Gateway:** Currently supports Cash on Delivery and manual credit card processing. Integration with CMI (Centre Monétique Interbancaire) or Stripe is scheduled for Phase 2.
+- **Partial Item Returns:** Return requests are handled at the sub-order level; item-by-item partial refund workflows are in development.

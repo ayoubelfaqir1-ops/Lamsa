@@ -1,3 +1,13 @@
 <?php
 
-// API routes have been removed - this is now a web application
+use App\Http\Controllers\HealthCheckController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Core API Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('v1')->group(function () {
+    Route::get('/health', HealthCheckController::class);
+});

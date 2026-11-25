@@ -17,6 +17,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Media Disk (for uploaded store logos, product pictures, etc.)
+    |--------------------------------------------------------------------------
+    |
+    | In local development, defaults to 'public' (served via /storage symlink).
+    | In production, set MEDIA_DISK=s3 to store uploads on AWS S3.
+    |
+    */
+    'media_disk' => env('MEDIA_DISK', 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |

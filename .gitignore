@@ -25,3 +25,8 @@ _ide_helper_models.php
 phpstan-report.json
 GEMINI.md
 /frontend-assets
+/.agents
+/test-results
+/tests-e2e/report
+/.schemathesis
+/docs/deployment

@@ -23,7 +23,7 @@ class StoreResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
-            'logo_url' => $this->logo ? Storage::disk('public')->url($this->logo) : null,
+            'logo_url' => $this->logo ? Storage::disk((string) config('filesystems.media_disk', 'public'))->url($this->logo) : null,
             'is_active' => (bool) $this->is_active,
             'created_at' => $this->created_at?->toIso8601String(),
             'artisan' => $this->whenLoaded('artisan', fn () => [

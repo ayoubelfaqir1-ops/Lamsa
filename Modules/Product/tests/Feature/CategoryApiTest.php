@@ -3,6 +3,7 @@
 namespace Modules\Product\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Modules\Product\Models\Category;
 use Modules\Product\Models\Product;
 use Spatie\Permission\Models\Role;
@@ -61,5 +62,70 @@ class CategoryApiTest extends TestCase
             ->assertJsonPath('data.0.name', 'Apple')
             ->assertJsonPath('data.1.name', 'Mango')
             ->assertJsonPath('data.2.name', 'Zebra');
+    }
+
+    public function test_categories_list_is_cached(): void
+    {
+        Cache::flush();
+        $this->assertFalse(Cache::has('active_categories_list'));
+
+        Category::factory()->create(['name' => 'Textiles', 'is_active' => true]);
+
+        // First call caches the result
+        $this->getJson('/api/v1/categories')->assertOk();
+        $this->assertTrue(Cache::has('active_categories_list'));
+    }
+
+    public function test_category_cache_invalidated_when_category_updated(): void
+    {
+        Cache::flush();
+        $category = Category::factory()->create(['name' => 'Ceramics', 'is_active' => true]);
+
+        $this->getJson('/api/v1/categories')->assertOk();
+        $this->assertTrue(Cache::has('active_categories_list'));
+
+        $category->update(['name' => 'Moroccan Ceramics']);
+        $this->assertFalse(Cache::has('active_categories_list'));
+    }
+
+    public function test_category_cache_invalidated_when_category_deleted(): void
+    {
+        Cache::flush();
+        $category = Category::factory()->create(['name' => 'Jewelry', 'is_active' => true]);
+
+        $this->getJson('/api/v1/categories')->assertOk();
+        $this->assertTrue(Cache::has('active_categories_list'));
+
+        $category->delete();
+        $this->assertFalse(Cache::has('active_categories_list'));
+    }
+
+    public function test_category_cache_invalidated_when_product_saved_or_deleted(): void
+    {
+        Cache::flush();
+        $category = Category::factory()->create(['is_active' => true]);
+
+        $this->getJson('/api/v1/categories')->assertOk();
+        $this->assertTrue(Cache::has('active_categories_list'));
+
+        // Adding a product invalidates count cache
+        $product = Product::factory()->create(['category_id' => $category->id]);
+        $this->assertFalse(Cache::has('active_categories_list'));
+
+        // Query again to repopulate cache
+        $this->getJson('/api/v1/categories')->assertOk();
+        $this->assertTrue(Cache::has('active_categories_list'));
+
+        // Deleting the product invalidates cache
+        $product->delete();
+        $this->assertFalse(Cache::has('active_categories_list'));
+    }
+
+    public function test_category_response_has_cache_control_headers(): void
+    {
+        Category::factory()->create(['is_active' => true]);
+
+        $response = $this->getJson('/api/v1/categories');
+        $this->assertStringContainsString('max-age=3600', (string) $response->headers->get('Cache-Control'));
     }
 }

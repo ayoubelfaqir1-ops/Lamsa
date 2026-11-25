@@ -1,6 +1,16 @@
 {
+  "name": "lamsa-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report tests-e2e/report",
+    "test:fuzz": "schemathesis run http://127.0.0.1:8000/docs/api.json --request-timeout 30 --checks all"
+  },
   "devDependencies": {
+    "@playwright/test": "^1.49.0",
     "laravel-echo": "^2.5.0",
-    "pusher-js": "^8.6.0"
+    "pusher-js": "^8.6.0",
+    "typescript": "^5.0.0"
   }
 }
