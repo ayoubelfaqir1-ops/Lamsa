@@ -10,6 +10,26 @@
 
 ---
 
+## 📖 About the Project
+
+### 🌍 Business & Product Vision
+**Lamsa.ma (لمسة)** is a headless e-commerce and live auction platform built to empower traditional Moroccan craftsmen. By removing predatory intermediaries, Lamsa gives verified artisans direct digital storefronts, transparent order fulfillment, and competitive live auctions to reach a global market.
+
+### ⚙️ Technical Architecture
+Engineered with **Laravel 12** and **PHP 8.2** as a **Modular Monolith** with strict domain boundaries across six self-contained modules (`Auth`, `Store`, `Product`, `Order`, `Auction`, `CMS`). The API is stateless and headless-first, pairing real-time WebSocket broadcasting with Redis caching, AWS S3 media delivery, and automated OpenAPI 3.1 documentation.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Backend & Architecture:** PHP 8.2+, Laravel 12 (Modular Monolith), Laravel Sanctum, Spatie Permissions
+- **Database & Caching:** MySQL 8.0 (InnoDB row-locking), Redis (caching & queues)
+- **Real-Time & Async:** Laravel Reverb (WebSockets), Supervisor
+- **Cloud & Storage:** AWS S3 / CloudFront (Flysystem), Nginx Reverse Proxy
+- **Testing & Docs:** PHPUnit, Playwright (E2E API Journeys), Dedoc Scramble (OpenAPI 3.1)
+
+---
+
 ## 🏛️ High-Level System Architecture
 
 Lamsa is engineered as a **Modular Monolith** where business logic is strictly encapsulated into domain modules. It uses a **stateless, API-first / headless design** paired with real-time WebSocket broadcasting and high-concurrency database row-locking.
@@ -113,6 +133,16 @@ npm run test:e2e       # Run automated Playwright API E2E journeys
 The API will be live at: `http://127.0.0.1:8000/api/v1/health`  
 Interactive OpenAPI documentation: `http://127.0.0.1:8000/docs/api`  
 Visual E2E Test Report: `npm run test:e2e:report`
+
+---
+
+## 🧠 Most Difficult Aspect & How It Was Solved
+
+**The Challenge:**  
+In a live auction and multi-vendor marketplace, concurrent requests create severe **race conditions**—two buyers bidding the exact same amount at the same millisecond, or two checkouts claiming the last remaining handcrafted item simultaneously.
+
+**The Solution:**  
+We enforced **pessimistic row-level locking** (`SELECT ... FOR UPDATE` via `lockForUpdate()`) inside ACID database transactions across both `Modules/Auction` and `Modules/Order` (documented in [ADR 0002](docs/architecture/decisions/0002-pessimistic-locking-for-auctions-and-orders.md)). Paired with Laravel Reverb WebSockets for real-time bid broadcasts and Eloquent Observer-driven Redis cache invalidation ([ADR 0003](docs/architecture/decisions/0003-event-driven-cache-invalidation-over-tags.md)), this guarantees zero double-spending or inconsistent auction states under high concurrency.
 
 ---
 

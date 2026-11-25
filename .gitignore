@@ -29,3 +29,4 @@ GEMINI.md
 /test-results
 /tests-e2e/report
 /.schemathesis
+/docs/deployment
